@@ -1,0 +1,600 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2E90B0D6C4BEFA7B765D92F4 /* Pods_Marko.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6CD6B236374CDB251DE99F /* Pods_Marko.framework */; };
+		FA3E24422D71202900BF370F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA3E24412D71202900BF370F /* GoogleService-Info.plist */; };
+		FA644BDE2D7257BC008DC0EC /* TeacherDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA644BDD2D7257BC008DC0EC /* TeacherDetailViewController.swift */; };
+		FA644BE12D7257F1008DC0EC /* AppointmentSlotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA644BE02D7257F1008DC0EC /* AppointmentSlotView.swift */; };
+		FA644BE42D725818008DC0EC /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA644BE32D725818008DC0EC /* ProfileViewController.swift */; };
+		FA644BE82D72583F008DC0EC /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA644BE72D72583F008DC0EC /* ProfileCoordinator.swift */; };
+		FA644BED2D725944008DC0EC /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA644BEC2D725944008DC0EC /* User.swift */; };
+		FA644BF12D725961008DC0EC /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA644BF02D725961008DC0EC /* ProfileViewModel.swift */; };
+		FA644BF42D72599C008DC0EC /* TeacherDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA644BF32D72599C008DC0EC /* TeacherDetailViewModel.swift */; };
+		FA675E7D2D6E71B40087483C /* WordsMemoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA675E7C2D6E71B40087483C /* WordsMemoCoordinator.swift */; };
+		FA68F8792D6F631900AA2567 /* TeacherListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA68F8782D6F631900AA2567 /* TeacherListViewController.swift */; };
+		FA8A1E1E2D6BFAC100BFC55F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A1E1D2D6BFAC100BFC55F /* AppDelegate.swift */; };
+		FA8A1E202D6BFAC100BFC55F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A1E1F2D6BFAC100BFC55F /* SceneDelegate.swift */; };
+		FA8A1E272D6BFAC400BFC55F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA8A1E262D6BFAC400BFC55F /* Assets.xcassets */; };
+		FA8A1E2A2D6BFAC400BFC55F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA8A1E282D6BFAC400BFC55F /* LaunchScreen.storyboard */; };
+		FA8A1E342D6BFBD500BFC55F /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A1E332D6BFBD500BFC55F /* Coordinator.swift */; };
+		FA8A1E372D6BFC5800BFC55F /* MainTabCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A1E362D6BFC5800BFC55F /* MainTabCoordinator.swift */; };
+		FA8A1E3A2D6C045C00BFC55F /* TeacherCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A1E392D6C045C00BFC55F /* TeacherCoordinator.swift */; };
+		FA8A1E3D2D6C059400BFC55F /* TeacherListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A1E3C2D6C059400BFC55F /* TeacherListViewModel.swift */; };
+		FA8A1E402D6C083D00BFC55F /* Teacher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A1E3F2D6C083D00BFC55F /* Teacher.swift */; };
+		FA8A1E432D6C0B3D00BFC55F /* TimeSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A1E422D6C0B3D00BFC55F /* TimeSlot.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		17BC0859D03F16268C7637FF /* Pods-Marko.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marko.debug.xcconfig"; path = "Target Support Files/Pods-Marko/Pods-Marko.debug.xcconfig"; sourceTree = "<group>"; };
+		9EB5212A5F71ACF867BFD6E0 /* Pods-Marko.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marko.release.xcconfig"; path = "Target Support Files/Pods-Marko/Pods-Marko.release.xcconfig"; sourceTree = "<group>"; };
+		EC6CD6B236374CDB251DE99F /* Pods_Marko.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Marko.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA3E24412D71202900BF370F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FA644BDD2D7257BC008DC0EC /* TeacherDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherDetailViewController.swift; sourceTree = "<group>"; };
+		FA644BE02D7257F1008DC0EC /* AppointmentSlotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppointmentSlotView.swift; sourceTree = "<group>"; };
+		FA644BE32D725818008DC0EC /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		FA644BE72D72583F008DC0EC /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
+		FA644BEC2D725944008DC0EC /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		FA644BF02D725961008DC0EC /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		FA644BF32D72599C008DC0EC /* TeacherDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherDetailViewModel.swift; sourceTree = "<group>"; };
+		FA675E7C2D6E71B40087483C /* WordsMemoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsMemoCoordinator.swift; sourceTree = "<group>"; };
+		FA68F8782D6F631900AA2567 /* TeacherListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherListViewController.swift; sourceTree = "<group>"; };
+		FA8A1E1A2D6BFAC100BFC55F /* Marko.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Marko.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA8A1E1D2D6BFAC100BFC55F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		FA8A1E1F2D6BFAC100BFC55F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		FA8A1E262D6BFAC400BFC55F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FA8A1E292D6BFAC400BFC55F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		FA8A1E2B2D6BFAC400BFC55F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FA8A1E332D6BFBD500BFC55F /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		FA8A1E362D6BFC5800BFC55F /* MainTabCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabCoordinator.swift; sourceTree = "<group>"; };
+		FA8A1E392D6C045C00BFC55F /* TeacherCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherCoordinator.swift; sourceTree = "<group>"; };
+		FA8A1E3C2D6C059400BFC55F /* TeacherListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherListViewModel.swift; sourceTree = "<group>"; };
+		FA8A1E3F2D6C083D00BFC55F /* Teacher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Teacher.swift; sourceTree = "<group>"; };
+		FA8A1E422D6C0B3D00BFC55F /* TimeSlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSlot.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FA8A1E172D6BFAC100BFC55F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2E90B0D6C4BEFA7B765D92F4 /* Pods_Marko.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3D9B1AE86E6CCE43A91F9071 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				17BC0859D03F16268C7637FF /* Pods-Marko.debug.xcconfig */,
+				9EB5212A5F71ACF867BFD6E0 /* Pods-Marko.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		AF58FD841FF38E1F8ECD7F70 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EC6CD6B236374CDB251DE99F /* Pods_Marko.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FA1CCD172D73463C0091C355 /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				FA8A1E332D6BFBD500BFC55F /* Coordinator.swift */,
+				FA8A1E362D6BFC5800BFC55F /* MainTabCoordinator.swift */,
+				FA8A1E392D6C045C00BFC55F /* TeacherCoordinator.swift */,
+				FA675E7C2D6E71B40087483C /* WordsMemoCoordinator.swift */,
+				FA644BE72D72583F008DC0EC /* ProfileCoordinator.swift */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		FA1CCD182D7346A20091C355 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FA644BEC2D725944008DC0EC /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FA1CCD192D7346CE0091C355 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				FA1CCD242D7348160091C355 /* Profile */,
+				FA1CCD1E2D7347A70091C355 /* WordsMemo */,
+				FA1CCD1A2D7346D80091C355 /* Teacher */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		FA1CCD1A2D7346D80091C355 /* Teacher */ = {
+			isa = PBXGroup;
+			children = (
+				FA1CCD1D2D7347670091C355 /* View */,
+				FA1CCD1C2D7347060091C355 /* ViewModel */,
+				FA1CCD1B2D7346EB0091C355 /* Model */,
+			);
+			path = Teacher;
+			sourceTree = "<group>";
+		};
+		FA1CCD1B2D7346EB0091C355 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FA8A1E3F2D6C083D00BFC55F /* Teacher.swift */,
+				FA8A1E422D6C0B3D00BFC55F /* TimeSlot.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		FA1CCD1C2D7347060091C355 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				FA644BF32D72599C008DC0EC /* TeacherDetailViewModel.swift */,
+				FA8A1E3C2D6C059400BFC55F /* TeacherListViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		FA1CCD1D2D7347670091C355 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				FA7111652D73C03500587913 /* CustomViews */,
+				FA644BDD2D7257BC008DC0EC /* TeacherDetailViewController.swift */,
+				FA68F8782D6F631900AA2567 /* TeacherListViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FA1CCD1E2D7347A70091C355 /* WordsMemo */ = {
+			isa = PBXGroup;
+			children = (
+				FA1CCD212D7347D00091C355 /* View */,
+				FA1CCD202D7347C20091C355 /* ViewModel */,
+				FA1CCD1F2D7347B90091C355 /* Model */,
+			);
+			path = WordsMemo;
+			sourceTree = "<group>";
+		};
+		FA1CCD1F2D7347B90091C355 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		FA1CCD202D7347C20091C355 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		FA1CCD212D7347D00091C355 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FA1CCD242D7348160091C355 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				FA1CCD272D73482C0091C355 /* Model */,
+				FA1CCD262D7348230091C355 /* ViewModel */,
+				FA1CCD252D73481E0091C355 /* View */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		FA1CCD252D73481E0091C355 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				FA644BE32D725818008DC0EC /* ProfileViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FA1CCD262D7348230091C355 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				FA644BF02D725961008DC0EC /* ProfileViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		FA1CCD272D73482C0091C355 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		FA7111652D73C03500587913 /* CustomViews */ = {
+			isa = PBXGroup;
+			children = (
+				FA644BE02D7257F1008DC0EC /* AppointmentSlotView.swift */,
+			);
+			path = CustomViews;
+			sourceTree = "<group>";
+		};
+		FA7111662D73C08100587913 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				FA8A1E282D6BFAC400BFC55F /* LaunchScreen.storyboard */,
+				FA8A1E262D6BFAC400BFC55F /* Assets.xcassets */,
+				FA8A1E1F2D6BFAC100BFC55F /* SceneDelegate.swift */,
+				FA8A1E1D2D6BFAC100BFC55F /* AppDelegate.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		FA8A1E112D6BFAC100BFC55F = {
+			isa = PBXGroup;
+			children = (
+				FA8A1E1C2D6BFAC100BFC55F /* Marko */,
+				FA8A1E1B2D6BFAC100BFC55F /* Products */,
+				3D9B1AE86E6CCE43A91F9071 /* Pods */,
+				AF58FD841FF38E1F8ECD7F70 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		FA8A1E1B2D6BFAC100BFC55F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FA8A1E1A2D6BFAC100BFC55F /* Marko.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FA8A1E1C2D6BFAC100BFC55F /* Marko */ = {
+			isa = PBXGroup;
+			children = (
+				FA1CCD172D73463C0091C355 /* Coordinators */,
+				FA1CCD182D7346A20091C355 /* Models */,
+				FA1CCD192D7346CE0091C355 /* Features */,
+				FA7111662D73C08100587913 /* Support */,
+				FA3E24412D71202900BF370F /* GoogleService-Info.plist */,
+				FA8A1E2B2D6BFAC400BFC55F /* Info.plist */,
+			);
+			path = Marko;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FA8A1E192D6BFAC100BFC55F /* Marko */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FA8A1E2E2D6BFAC400BFC55F /* Build configuration list for PBXNativeTarget "Marko" */;
+			buildPhases = (
+				67497ED71658BB4F677D41B7 /* [CP] Check Pods Manifest.lock */,
+				FA8A1E162D6BFAC100BFC55F /* Sources */,
+				FA8A1E172D6BFAC100BFC55F /* Frameworks */,
+				FA8A1E182D6BFAC100BFC55F /* Resources */,
+				73B7540515E0E307F40DDC08 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Marko;
+			productName = Marko;
+			productReference = FA8A1E1A2D6BFAC100BFC55F /* Marko.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FA8A1E122D6BFAC100BFC55F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
+				TargetAttributes = {
+					FA8A1E192D6BFAC100BFC55F = {
+						CreatedOnToolsVersion = 12.4;
+					};
+				};
+			};
+			buildConfigurationList = FA8A1E152D6BFAC100BFC55F /* Build configuration list for PBXProject "Marko" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FA8A1E112D6BFAC100BFC55F;
+			productRefGroup = FA8A1E1B2D6BFAC100BFC55F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FA8A1E192D6BFAC100BFC55F /* Marko */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FA8A1E182D6BFAC100BFC55F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA8A1E2A2D6BFAC400BFC55F /* LaunchScreen.storyboard in Resources */,
+				FA8A1E272D6BFAC400BFC55F /* Assets.xcassets in Resources */,
+				FA3E24422D71202900BF370F /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		67497ED71658BB4F677D41B7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Marko-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		73B7540515E0E307F40DDC08 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Marko/Pods-Marko-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Marko/Pods-Marko-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Marko/Pods-Marko-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FA8A1E162D6BFAC100BFC55F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA68F8792D6F631900AA2567 /* TeacherListViewController.swift in Sources */,
+				FA8A1E342D6BFBD500BFC55F /* Coordinator.swift in Sources */,
+				FA644BDE2D7257BC008DC0EC /* TeacherDetailViewController.swift in Sources */,
+				FA8A1E432D6C0B3D00BFC55F /* TimeSlot.swift in Sources */,
+				FA644BE82D72583F008DC0EC /* ProfileCoordinator.swift in Sources */,
+				FA644BED2D725944008DC0EC /* User.swift in Sources */,
+				FA8A1E3A2D6C045C00BFC55F /* TeacherCoordinator.swift in Sources */,
+				FA644BF42D72599C008DC0EC /* TeacherDetailViewModel.swift in Sources */,
+				FA8A1E3D2D6C059400BFC55F /* TeacherListViewModel.swift in Sources */,
+				FA8A1E402D6C083D00BFC55F /* Teacher.swift in Sources */,
+				FA8A1E1E2D6BFAC100BFC55F /* AppDelegate.swift in Sources */,
+				FA644BF12D725961008DC0EC /* ProfileViewModel.swift in Sources */,
+				FA644BE42D725818008DC0EC /* ProfileViewController.swift in Sources */,
+				FA8A1E372D6BFC5800BFC55F /* MainTabCoordinator.swift in Sources */,
+				FA675E7D2D6E71B40087483C /* WordsMemoCoordinator.swift in Sources */,
+				FA644BE12D7257F1008DC0EC /* AppointmentSlotView.swift in Sources */,
+				FA8A1E202D6BFAC100BFC55F /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		FA8A1E282D6BFAC400BFC55F /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FA8A1E292D6BFAC400BFC55F /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		FA8A1E2C2D6BFAC400BFC55F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		FA8A1E2D2D6BFAC400BFC55F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FA8A1E2F2D6BFAC400BFC55F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 17BC0859D03F16268C7637FF /* Pods-Marko.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = N89V434NF8;
+				INFOPLIST_FILE = Marko/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yashchenko.Marko;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FA8A1E302D6BFAC400BFC55F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9EB5212A5F71ACF867BFD6E0 /* Pods-Marko.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = N89V434NF8;
+				INFOPLIST_FILE = Marko/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yashchenko.Marko;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FA8A1E152D6BFAC100BFC55F /* Build configuration list for PBXProject "Marko" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FA8A1E2C2D6BFAC400BFC55F /* Debug */,
+				FA8A1E2D2D6BFAC400BFC55F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FA8A1E2E2D6BFAC400BFC55F /* Build configuration list for PBXNativeTarget "Marko" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FA8A1E2F2D6BFAC400BFC55F /* Debug */,
+				FA8A1E302D6BFAC400BFC55F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FA8A1E122D6BFAC100BFC55F /* Project object */;
+}
