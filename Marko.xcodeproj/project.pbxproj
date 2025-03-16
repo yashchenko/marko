@@ -18,6 +18,8 @@
 		FA644BF42D72599C008DC0EC /* TeacherDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA644BF32D72599C008DC0EC /* TeacherDetailViewModel.swift */; };
 		FA675E7D2D6E71B40087483C /* WordsMemoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA675E7C2D6E71B40087483C /* WordsMemoCoordinator.swift */; };
 		FA68F8792D6F631900AA2567 /* TeacherListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA68F8782D6F631900AA2567 /* TeacherListViewController.swift */; };
+		FA83FD242D7FBAA9004E9D0A /* VocabularyWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA83FD232D7FBAA9004E9D0A /* VocabularyWord.swift */; };
+		FA83FD282D7FBCEE004E9D0A /* WordsMemoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA83FD272D7FBCEE004E9D0A /* WordsMemoViewModel.swift */; };
 		FA8A1E1E2D6BFAC100BFC55F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A1E1D2D6BFAC100BFC55F /* AppDelegate.swift */; };
 		FA8A1E202D6BFAC100BFC55F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A1E1F2D6BFAC100BFC55F /* SceneDelegate.swift */; };
 		FA8A1E272D6BFAC400BFC55F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA8A1E262D6BFAC400BFC55F /* Assets.xcassets */; };
@@ -28,6 +30,8 @@
 		FA8A1E3D2D6C059400BFC55F /* TeacherListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A1E3C2D6C059400BFC55F /* TeacherListViewModel.swift */; };
 		FA8A1E402D6C083D00BFC55F /* Teacher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A1E3F2D6C083D00BFC55F /* Teacher.swift */; };
 		FA8A1E432D6C0B3D00BFC55F /* TimeSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A1E422D6C0B3D00BFC55F /* TimeSlot.swift */; };
+		FAC9D6522D84FE1200DC75C9 /* TeacherRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC9D6512D84FE1200DC75C9 /* TeacherRepository.swift */; };
+		FAC9D6552D84FEB000DC75C9 /* TeacherCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC9D6542D84FEB000DC75C9 /* TeacherCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +48,8 @@
 		FA644BF32D72599C008DC0EC /* TeacherDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherDetailViewModel.swift; sourceTree = "<group>"; };
 		FA675E7C2D6E71B40087483C /* WordsMemoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsMemoCoordinator.swift; sourceTree = "<group>"; };
 		FA68F8782D6F631900AA2567 /* TeacherListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherListViewController.swift; sourceTree = "<group>"; };
+		FA83FD232D7FBAA9004E9D0A /* VocabularyWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyWord.swift; sourceTree = "<group>"; };
+		FA83FD272D7FBCEE004E9D0A /* WordsMemoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsMemoViewModel.swift; sourceTree = "<group>"; };
 		FA8A1E1A2D6BFAC100BFC55F /* Marko.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Marko.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA8A1E1D2D6BFAC100BFC55F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FA8A1E1F2D6BFAC100BFC55F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -56,6 +62,8 @@
 		FA8A1E3C2D6C059400BFC55F /* TeacherListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherListViewModel.swift; sourceTree = "<group>"; };
 		FA8A1E3F2D6C083D00BFC55F /* Teacher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Teacher.swift; sourceTree = "<group>"; };
 		FA8A1E422D6C0B3D00BFC55F /* TimeSlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSlot.swift; sourceTree = "<group>"; };
+		FAC9D6512D84FE1200DC75C9 /* TeacherRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherRepository.swift; sourceTree = "<group>"; };
+		FAC9D6542D84FEB000DC75C9 /* TeacherCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				FA8A1E3F2D6C083D00BFC55F /* Teacher.swift */,
+				FAC9D6512D84FE1200DC75C9 /* TeacherRepository.swift */,
 				FA8A1E422D6C0B3D00BFC55F /* TimeSlot.swift */,
 			);
 			path = Model;
@@ -151,6 +160,7 @@
 				FA7111652D73C03500587913 /* CustomViews */,
 				FA644BDD2D7257BC008DC0EC /* TeacherDetailViewController.swift */,
 				FA68F8782D6F631900AA2567 /* TeacherListViewController.swift */,
+				FAC9D6542D84FEB000DC75C9 /* TeacherCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -168,6 +178,7 @@
 		FA1CCD1F2D7347B90091C355 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				FA83FD232D7FBAA9004E9D0A /* VocabularyWord.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -175,6 +186,7 @@
 		FA1CCD202D7347C20091C355 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				FA83FD272D7FBCEE004E9D0A /* WordsMemoViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -390,15 +402,19 @@
 				FA644BE82D72583F008DC0EC /* ProfileCoordinator.swift in Sources */,
 				FA644BED2D725944008DC0EC /* User.swift in Sources */,
 				FA8A1E3A2D6C045C00BFC55F /* TeacherCoordinator.swift in Sources */,
+				FAC9D6552D84FEB000DC75C9 /* TeacherCollectionViewCell.swift in Sources */,
 				FA644BF42D72599C008DC0EC /* TeacherDetailViewModel.swift in Sources */,
 				FA8A1E3D2D6C059400BFC55F /* TeacherListViewModel.swift in Sources */,
+				FA83FD242D7FBAA9004E9D0A /* VocabularyWord.swift in Sources */,
 				FA8A1E402D6C083D00BFC55F /* Teacher.swift in Sources */,
 				FA8A1E1E2D6BFAC100BFC55F /* AppDelegate.swift in Sources */,
+				FA83FD282D7FBCEE004E9D0A /* WordsMemoViewModel.swift in Sources */,
 				FA644BF12D725961008DC0EC /* ProfileViewModel.swift in Sources */,
 				FA644BE42D725818008DC0EC /* ProfileViewController.swift in Sources */,
 				FA8A1E372D6BFC5800BFC55F /* MainTabCoordinator.swift in Sources */,
 				FA675E7D2D6E71B40087483C /* WordsMemoCoordinator.swift in Sources */,
 				FA644BE12D7257F1008DC0EC /* AppointmentSlotView.swift in Sources */,
+				FAC9D6522D84FE1200DC75C9 /* TeacherRepository.swift in Sources */,
 				FA8A1E202D6BFAC100BFC55F /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -542,14 +558,16 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N89V434NF8;
 				INFOPLIST_FILE = Marko/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yashchenko.Marko;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -562,14 +580,16 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N89V434NF8;
 				INFOPLIST_FILE = Marko/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yashchenko.Marko;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

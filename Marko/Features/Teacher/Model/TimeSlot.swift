@@ -8,7 +8,6 @@
 import UIKit
 import FirebaseFirestore
 
-
 struct TimeSlot: Codable {
     let startTime: Date
     let endTime: Date
@@ -21,23 +20,29 @@ struct TimeSlot: Codable {
         case isBooked
     }
     
+    // Firestore timestamp representation
+    private struct FirestoreTimestamp: Decodable {
+        let seconds: Int64
+        let nanoseconds: Int32
+        
+        var date: Date {
+            return Date(timeIntervalSince1970: TimeInterval(seconds) + TimeInterval(nanoseconds) / 1_000_000_000)
+        }
+    }
+    
     // Custom decoder to handle Firestore Timestamps
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        // Firestore timestamps come as dictionaries with seconds and nanoseconds
-        if let startTimeMap = try? container.decode([String: Any].self, forKey: .startTime) {
-            let timestamp = Timestamp(seconds: startTimeMap["seconds"] as! Int64,
-                                      nanoseconds: startTimeMap["nanoseconds"] as! Int32)
-            startTime = timestamp.dateValue()
+        // Try to decode as FirestoreTimestamp first
+        if let startTimestamp = try? container.decode(FirestoreTimestamp.self, forKey: .startTime) {
+            startTime = startTimestamp.date
         } else {
             startTime = try container.decode(Date.self, forKey: .startTime)
         }
         
-        if let endTimeMap = try? container.decode([String: Any].self, forKey: .endTime) {
-            let timestamp = Timestamp(seconds: endTimeMap["seconds"] as! Int64,
-                                     nanoseconds: endTimeMap["nanoseconds"] as! Int32)
-            endTime = timestamp.dateValue()
+        if let endTimestamp = try? container.decode(FirestoreTimestamp.self, forKey: .endTime) {
+            endTime = endTimestamp.date
         } else {
             endTime = try container.decode(Date.self, forKey: .endTime)
         }
@@ -63,7 +68,7 @@ struct TimeSlot: Codable {
         
         db.collection("teachers").document(teacherId).collection("timeSlots").addDocument(data: data)
     }
-
+    
     // To fetch TimeSlots from Firebase
     func fetchTimeSlots(for teacherId: String, completion: @escaping ([TimeSlot]) -> Void) {
         let db = Firestore.firestore()

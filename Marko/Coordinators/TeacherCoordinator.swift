@@ -15,10 +15,12 @@ class TeacherCoordinator: Coordinator {
     }
     
     func start() {
-        let viewModel = TeacherListViewModel(teachers: TeacherListViewModel.sampleData())
+        print("TeacherCoordinator started")
+        let viewModel = TeacherListViewModel()
         
-        // 1) Hook up the didSelectTeacher closure:
+        // Hook up the didSelectTeacher closure:
         viewModel.didSelectTeacher = { [weak self] teacher in
+            print("Teacher selected: \(teacher.name)")
             self?.showTeacherDetail(for: teacher)
         }
         
@@ -26,9 +28,7 @@ class TeacherCoordinator: Coordinator {
         navigationController.pushViewController(teacherListVC, animated: false)
     }
     
-    // 2) Implement the showTeacherDetail method:
     private func showTeacherDetail(for teacher: Teacher) {
-        // Usually you'd have a TeacherDetailViewModel, e.g.:
         let detailViewModel = TeacherDetailViewModel(teacher: teacher)
         let detailVC = TeacherDetailViewController(viewModel: detailViewModel)
         navigationController.pushViewController(detailVC, animated: true)

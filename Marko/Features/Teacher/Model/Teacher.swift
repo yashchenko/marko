@@ -5,18 +5,28 @@
 //  Created by Ivan on 24.02.2025.
 //
 
-import UIKit
-
 // later it ought to conform Codable
 
+import UIKit
+
 struct Teacher {
+    let id: String
     let name: String
     let subject: String
     let description: String
     let rank: String
-    let id: String
-    let profileImage: UIImage
-    // let availability: [TimeSlot]
+    let profileImageURL: String
+    var profileImage: UIImage
+    
+    init(id: String, name: String, subject: String, description: String, rank: String, profileImageURL: String, profileImage: UIImage = UIImage()) {
+        self.id = id
+        self.name = name
+        self.subject = subject
+        self.description = description
+        self.rank = rank
+        self.profileImageURL = profileImageURL
+        self.profileImage = profileImage
+    }
 }
 
 //

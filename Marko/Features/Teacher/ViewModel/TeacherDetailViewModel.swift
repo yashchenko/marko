@@ -9,7 +9,6 @@ import UIKit
 
 class TeacherDetailViewModel {
     let teacher: Teacher
-    // Additional properties for description, rank, available time slots, etc.
     
     init(teacher: Teacher) {
         self.teacher = teacher
