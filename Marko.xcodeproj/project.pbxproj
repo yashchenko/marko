@@ -30,7 +30,8 @@
 		FA8A1E3D2D6C059400BFC55F /* TeacherListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A1E3C2D6C059400BFC55F /* TeacherListViewModel.swift */; };
 		FA8A1E402D6C083D00BFC55F /* Teacher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A1E3F2D6C083D00BFC55F /* Teacher.swift */; };
 		FA8A1E432D6C0B3D00BFC55F /* TimeSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A1E422D6C0B3D00BFC55F /* TimeSlot.swift */; };
-		FAC9D6522D84FE1200DC75C9 /* TeacherRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC9D6512D84FE1200DC75C9 /* TeacherRepository.swift */; };
+		FA9146322D8E5066001C17B7 /* TeacherRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9146312D8E5066001C17B7 /* TeacherRepository.swift */; };
+		FAC9D6522D84FE1200DC75C9 /* TimeSlotRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC9D6512D84FE1200DC75C9 /* TimeSlotRepository.swift */; };
 		FAC9D6552D84FEB000DC75C9 /* TeacherCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC9D6542D84FEB000DC75C9 /* TeacherCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -62,7 +63,8 @@
 		FA8A1E3C2D6C059400BFC55F /* TeacherListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherListViewModel.swift; sourceTree = "<group>"; };
 		FA8A1E3F2D6C083D00BFC55F /* Teacher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Teacher.swift; sourceTree = "<group>"; };
 		FA8A1E422D6C0B3D00BFC55F /* TimeSlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSlot.swift; sourceTree = "<group>"; };
-		FAC9D6512D84FE1200DC75C9 /* TeacherRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherRepository.swift; sourceTree = "<group>"; };
+		FA9146312D8E5066001C17B7 /* TeacherRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherRepository.swift; sourceTree = "<group>"; };
+		FAC9D6512D84FE1200DC75C9 /* TimeSlotRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSlotRepository.swift; sourceTree = "<group>"; };
 		FAC9D6542D84FEB000DC75C9 /* TeacherCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -139,8 +141,9 @@
 			isa = PBXGroup;
 			children = (
 				FA8A1E3F2D6C083D00BFC55F /* Teacher.swift */,
-				FAC9D6512D84FE1200DC75C9 /* TeacherRepository.swift */,
+				FAC9D6512D84FE1200DC75C9 /* TimeSlotRepository.swift */,
 				FA8A1E422D6C0B3D00BFC55F /* TimeSlot.swift */,
+				FA9146312D8E5066001C17B7 /* TeacherRepository.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -403,6 +406,7 @@
 				FA644BED2D725944008DC0EC /* User.swift in Sources */,
 				FA8A1E3A2D6C045C00BFC55F /* TeacherCoordinator.swift in Sources */,
 				FAC9D6552D84FEB000DC75C9 /* TeacherCollectionViewCell.swift in Sources */,
+				FA9146322D8E5066001C17B7 /* TeacherRepository.swift in Sources */,
 				FA644BF42D72599C008DC0EC /* TeacherDetailViewModel.swift in Sources */,
 				FA8A1E3D2D6C059400BFC55F /* TeacherListViewModel.swift in Sources */,
 				FA83FD242D7FBAA9004E9D0A /* VocabularyWord.swift in Sources */,
@@ -414,7 +418,7 @@
 				FA8A1E372D6BFC5800BFC55F /* MainTabCoordinator.swift in Sources */,
 				FA675E7D2D6E71B40087483C /* WordsMemoCoordinator.swift in Sources */,
 				FA644BE12D7257F1008DC0EC /* AppointmentSlotView.swift in Sources */,
-				FAC9D6522D84FE1200DC75C9 /* TeacherRepository.swift in Sources */,
+				FAC9D6522D84FE1200DC75C9 /* TimeSlotRepository.swift in Sources */,
 				FA8A1E202D6BFAC100BFC55F /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
