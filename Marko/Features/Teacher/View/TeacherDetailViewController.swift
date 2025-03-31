@@ -8,6 +8,7 @@
 import UIKit
 import FSCalendar
 import PassKit
+import Firebase
 
 class TeacherDetailViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource {
     private let viewModel: TeacherDetailViewModel
@@ -234,85 +235,84 @@ class TeacherDetailViewController: UIViewController, FSCalendarDelegate, FSCalen
     }
 }
 
-// MARK: - Apple Pay Delegate Extension
-//extension TeacherDetailViewController: PKPaymentAuthorizationViewControllerDelegate {
-//    func paymentAuthorizationViewController(_ controller: PKPaymentAuthorizationViewController,
-//                                            didAuthorizePayment payment: PKPayment,
-//                                            completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
-//        // In a real app, you would send payment.token to your server for processing
-//
-//        // For this demo, we'll assume payment is successful and book the slot
-//        guard let timeSlotId = UserDefaults.standard.string(forKey: "pendingBookingTimeSlotId"),
-//              let selectedTimeSlot = viewModel.availableTimeSlots.first(where: { $0.id == timeSlotId }) else {
-//            completion(PKPaymentAuthorizationResult(status: .failure, errors: nil))
-//            return
-//        }
-//
-//        // Book the time slot (using a mock user ID for now)
-//        viewModel.bookTimeSlot(selectedTimeSlot, userId: "current_user_id")
-//        UserDefaults.standard.removeObject(forKey: "pendingBookingTimeSlotId")
-//
-//        // Complete the Apple Pay transaction
-//        completion(PKPaymentAuthorizationResult(status: .success, errors: nil))
-//    }
-//
-//    func paymentAuthorizationViewControllerDidFinish(_ controller: PKPaymentAuthorizationViewController) {
-//        controller.dismiss(animated: true)
-//    }
-//}
-//
-//
-
 
 
 // MARK: - Apple Pay Delegate Extension
 extension TeacherDetailViewController: PKPaymentAuthorizationViewControllerDelegate {
-    // Current implementation (iOS 11+)
     
-    
+    // iOS 11+ implementation remains as is:
     func paymentAuthorizationViewController(_ controller: PKPaymentAuthorizationViewController,
                                             didAuthorizePayment payment: PKPayment,
                                             completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
         // In a real app, you would send payment.token to your server for processing
         
-        // For this demo, we'll assume payment is successful and book the slot
         guard let timeSlotId = UserDefaults.standard.string(forKey: "pendingBookingTimeSlotId"),
               let selectedTimeSlot = viewModel.availableTimeSlots.first(where: { $0.id == timeSlotId }) else {
             completion(PKPaymentAuthorizationResult(status: .failure, errors: nil))
             return
         }
         
-        // Book the time slot (using a mock user ID for now)
+        // Book the time slot with a mock user ID for this demo
         viewModel.bookTimeSlot(selectedTimeSlot, userId: "current_user_id")
         UserDefaults.standard.removeObject(forKey: "pendingBookingTimeSlotId")
         
-        // Complete the Apple Pay transaction
         completion(PKPaymentAuthorizationResult(status: .success, errors: nil))
     }
     
-    // Legacy implementation (pre-iOS 11) - add this method
+    // Legacy implementation (pre-iOS 11)
     func paymentAuthorizationViewController(_ controller: PKPaymentAuthorizationViewController,
-                                           didAuthorizePayment payment: PKPayment,
-                                           completion: @escaping (PKPaymentAuthorizationStatus) -> Void) {
+                                            didAuthorizePayment payment: PKPayment,
+                                            completion: @escaping (PKPaymentAuthorizationStatus) -> Void) {
         print("Payment authorized (legacy method)")
         print("Payment token: \(payment.token)")
         
-        // Mirror the same logic as above
+        // Get the real user ID from Firebase Auth
+        let userId = Auth.auth().currentUser?.uid ?? "anonymous_user"
+        
+        // Retrieve the pending time slot
         guard let timeSlotId = UserDefaults.standard.string(forKey: "pendingBookingTimeSlotId"),
               let selectedTimeSlot = viewModel.availableTimeSlots.first(where: { $0.id == timeSlotId }) else {
             completion(.failure)
             return
         }
         
-        // Book the time slot (using a mock user ID for now)
-        viewModel.bookTimeSlot(selectedTimeSlot, userId: "current_user_id")
+        // Book the time slot using the real user ID
+        viewModel.bookTimeSlot(selectedTimeSlot, userId: userId)
         UserDefaults.standard.removeObject(forKey: "pendingBookingTimeSlotId")
         
         // Complete the Apple Pay transaction
         completion(.success)
+        
+        // Store payment token details in Firebase for verification and record-keeping
+        storePaymentToken(payment.token, for: selectedTimeSlot.id, userId: userId)
     }
     
     func paymentAuthorizationViewControllerDidFinish(_ controller: PKPaymentAuthorizationViewController) {
         controller.dismiss(animated: true)
+    }
+    
+    // Helper method to store payment token in Firebase
+    private func storePaymentToken(_ token: PKPaymentToken, for timeSlotId: String, userId: String) {
+        let db = Firestore.firestore()
+        let paymentRef = db.collection("payments").document()
+        
+        // Convert token data to a base64 string for storage
+        let tokenDataString = token.paymentData.base64EncodedString()
+        
+        let paymentData: [String: Any] = [
+            "userId": userId,
+            "timeSlotId": timeSlotId,
+            "transactionIdentifier": token.transactionIdentifier,
+            "paymentData": tokenDataString,
+            "timestamp": FieldValue.serverTimestamp()
+        ]
+        
+        paymentRef.setData(paymentData) { error in
+            if let error = error {
+                print("Error storing payment information: \(error.localizedDescription)")
+            } else {
+                print("Payment information stored successfully")
+            }
+        }
     }
 }

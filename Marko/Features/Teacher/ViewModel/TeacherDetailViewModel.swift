@@ -6,11 +6,14 @@
 //
 
 import UIKit
+import Firebase
 
 class TeacherDetailViewModel {
     let teacher: Teacher
     private let timeSlotRepository = TimeSlotRepository()
     private(set) var availableTimeSlots: [TimeSlot] = []
+    private let bookingRepository = BookingRepository()
+    
     
     // Callback for when time slots are loaded
     var onTimeSlotsLoaded: (([TimeSlot]) -> Void)?
@@ -58,21 +61,49 @@ class TeacherDetailViewModel {
     
     // Book a time slot
     func bookTimeSlot(_ timeSlot: TimeSlot, userId: String) {
-        timeSlotRepository.bookTimeSlot(timeSlot, userId: userId) { [weak self] success in
-            guard let self = self else { return }
+        bookingRepository.createBooking(
+            teacherId: teacher.id,
+            timeSlot: timeSlot,
+            userId: userId
+        ) { [weak self] success, bookingId in
+            self?.onBookingCompleted?(success, timeSlot)
             
-            // Notify listeners of booking result
-            self.onBookingCompleted?(success, timeSlot)
-            
-            // If successful, refresh time slots
             if success {
-                self.loadAvailableTimeSlots()
+                // Also trigger a notification for the teacher (via Firebase Cloud Messaging)
+                self?.sendTeacherNotification(bookingId: bookingId, timeSlot: timeSlot)
             }
         }
     }
     
+    
     // Add sample time slots (for testing)
     func addSampleTimeSlots(completion: @escaping () -> Void) {
         timeSlotRepository.addSampleTimeSlots(for: teacher.id, completion: completion)
+    }
+    
+    private func sendTeacherNotification(bookingId: String?, timeSlot: TimeSlot) {
+        guard let bookingId = bookingId else { return }
+        
+        // This would typically be a server-side operation using Cloud Functions
+        // But for now, we can simulate by adding a notification record in Firestore
+        
+        let db = Firestore.firestore()
+        let notificationRef = db.collection("teacherNotifications").document()
+        
+        let notificationData: [String: Any] = [
+            "teacherId": teacher.id,
+            "bookingId": bookingId,
+            "message": "New booking received for \(timeSlot.formattedTimeSlot())",
+            "createdAt": FieldValue.serverTimestamp(),
+            "read": false
+        ]
+        
+        notificationRef.setData(notificationData) { error in
+            if let error = error {
+                print("Error sending teacher notification: \(error.localizedDescription)")
+            } else {
+                print("Teacher notification sent successfully")
+            }
+        }
     }
 }

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		2E90B0D6C4BEFA7B765D92F4 /* Pods_Marko.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6CD6B236374CDB251DE99F /* Pods_Marko.framework */; };
 		FA3E24422D71202900BF370F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA3E24412D71202900BF370F /* GoogleService-Info.plist */; };
+		FA5026CC2D950B9800F6FEB7 /* Booking.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5026CB2D950B9800F6FEB7 /* Booking.swift */; };
+		FA5026CF2D950BD500F6FEB7 /* BookingRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5026CE2D950BD500F6FEB7 /* BookingRepository.swift */; };
 		FA644BDE2D7257BC008DC0EC /* TeacherDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA644BDD2D7257BC008DC0EC /* TeacherDetailViewController.swift */; };
 		FA644BE12D7257F1008DC0EC /* AppointmentSlotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA644BE02D7257F1008DC0EC /* AppointmentSlotView.swift */; };
 		FA644BE42D725818008DC0EC /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA644BE32D725818008DC0EC /* ProfileViewController.swift */; };
@@ -40,6 +42,8 @@
 		9EB5212A5F71ACF867BFD6E0 /* Pods-Marko.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marko.release.xcconfig"; path = "Target Support Files/Pods-Marko/Pods-Marko.release.xcconfig"; sourceTree = "<group>"; };
 		EC6CD6B236374CDB251DE99F /* Pods_Marko.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Marko.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA3E24412D71202900BF370F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FA5026CB2D950B9800F6FEB7 /* Booking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Booking.swift; sourceTree = "<group>"; };
+		FA5026CE2D950BD500F6FEB7 /* BookingRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingRepository.swift; sourceTree = "<group>"; };
 		FA644BDD2D7257BC008DC0EC /* TeacherDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherDetailViewController.swift; sourceTree = "<group>"; };
 		FA644BE02D7257F1008DC0EC /* AppointmentSlotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppointmentSlotView.swift; sourceTree = "<group>"; };
 		FA644BE32D725818008DC0EC /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -143,6 +147,8 @@
 				FA8A1E3F2D6C083D00BFC55F /* Teacher.swift */,
 				FAC9D6512D84FE1200DC75C9 /* TimeSlotRepository.swift */,
 				FA8A1E422D6C0B3D00BFC55F /* TimeSlot.swift */,
+				FA5026CE2D950BD500F6FEB7 /* BookingRepository.swift */,
+				FA5026CB2D950B9800F6FEB7 /* Booking.swift */,
 				FA9146312D8E5066001C17B7 /* TeacherRepository.swift */,
 			);
 			path = Model;
@@ -417,9 +423,11 @@
 				FA644BE42D725818008DC0EC /* ProfileViewController.swift in Sources */,
 				FA8A1E372D6BFC5800BFC55F /* MainTabCoordinator.swift in Sources */,
 				FA675E7D2D6E71B40087483C /* WordsMemoCoordinator.swift in Sources */,
+				FA5026CF2D950BD500F6FEB7 /* BookingRepository.swift in Sources */,
 				FA644BE12D7257F1008DC0EC /* AppointmentSlotView.swift in Sources */,
 				FAC9D6522D84FE1200DC75C9 /* TimeSlotRepository.swift in Sources */,
 				FA8A1E202D6BFAC100BFC55F /* SceneDelegate.swift in Sources */,
+				FA5026CC2D950B9800F6FEB7 /* Booking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
