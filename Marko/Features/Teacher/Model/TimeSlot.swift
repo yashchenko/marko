@@ -4,7 +4,6 @@
 //
 //  Created by Ivan on 24.02.2025.
 
-
 import UIKit
 import FirebaseFirestore
 
@@ -15,10 +14,10 @@ struct TimeSlot: Identifiable {
        let endTime: Date
        var isBooked: Bool
        var bookedByUserId: String?
-       
+
        // Firestore document reference (non-Codable)
        var documentRef: DocumentReference? = nil
-    
+
     // Default initializer
     init(id: String = UUID().uuidString,
          teacherId: String,
@@ -33,7 +32,7 @@ struct TimeSlot: Identifiable {
         self.isBooked = isBooked
         self.bookedByUserId = bookedByUserId
     }
-    
+
     // Firestore dictionary representation
     var asDictionary: [String: Any] {
         return [
@@ -45,11 +44,11 @@ struct TimeSlot: Identifiable {
             "bookedByUserId": bookedByUserId ?? NSNull()
         ]
     }
-    
+
     // Create from Firestore document
     init?(document: QueryDocumentSnapshot) {
         let data = document.data()
-        
+
         guard
             let id = data["id"] as? String,
             let teacherId = data["teacherId"] as? String,
@@ -59,7 +58,7 @@ struct TimeSlot: Identifiable {
         else {
             return nil
         }
-        
+
         self.id = id
         self.teacherId = teacherId
         self.startTime = startTimestamp.dateValue()
@@ -68,20 +67,20 @@ struct TimeSlot: Identifiable {
         self.bookedByUserId = data["bookedByUserId"] as? String
         self.documentRef = document.reference
     }
-    
+
     // Format time slot for display
     func formattedTimeSlot() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEEE, MMM d"
         let dayString = dateFormatter.string(from: startTime)
-        
+
         dateFormatter.dateFormat = "h:mm a"
         let startTimeString = dateFormatter.string(from: startTime)
         let endTimeString = dateFormatter.string(from: endTime)
-        
+
         return "\(dayString), \(startTimeString) - \(endTimeString)"
     }
-    
+
     // Calculate price based on duration (in UAH)
     func calculatePrice(hourlyRate: Double = 300.0) -> Double {
         let duration = endTime.timeIntervalSince(startTime) / 3600 // in hours
@@ -93,7 +92,7 @@ extension TimeSlot: Codable {
     enum CodingKeys: String, CodingKey {
         case id, teacherId, startTime, endTime, isBooked, bookedByUserId
     }
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(String.self, forKey: .id)
@@ -104,7 +103,7 @@ extension TimeSlot: Codable {
         bookedByUserId = try container.decodeIfPresent(String.self, forKey: .bookedByUserId)
         documentRef = nil // This field isn't decoded
     }
-    
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
@@ -117,15 +116,16 @@ extension TimeSlot: Codable {
     }
 }
 
-
 extension TimeSlot {
     var toDictionary: [String: Any] {
         return [
             "id": id,
-            "startTime": startTime,
-            "endTime": endTime,
-            "price": calculatePrice(),
-            "teacherId": teacherId
+            "teacherId": teacherId,
+            "startTime": Timestamp(date: startTime),
+            "endTime": Timestamp(date: endTime),
+            "isBooked": isBooked,
+            "bookedByUserId": bookedByUserId as Any,
+            "price": calculatePrice()
         ]
     }
 }

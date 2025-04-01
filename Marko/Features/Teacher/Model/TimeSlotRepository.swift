@@ -54,11 +54,34 @@ class TimeSlotRepository {
             return
         }
         
-        // Update the document in Firestore
-        documentRef.updateData([
-            "isBooked": true,
-            "bookedByUserId": userId
-        ]) { error in
+        // Use a transaction to ensure consistency
+        db.runTransaction({ (transaction, errorPointer) -> Any? in
+            do {
+                let snapshot = try transaction.getDocument(documentRef)
+                
+                // Check if it's already booked
+                if let isBooked = snapshot.data()?["isBooked"] as? Bool, isBooked {
+                    let error = NSError(
+                        domain: "TimeSlotError",
+                        code: 100,
+                        userInfo: [NSLocalizedDescriptionKey: "This time slot is already booked."]
+                    )
+                    errorPointer?.pointee = error
+                    return nil
+                }
+                
+                // Update the document in Firestore
+                transaction.updateData([
+                    "isBooked": true,
+                    "bookedByUserId": userId
+                ], forDocument: documentRef)
+                
+                return true
+            } catch let fetchError as NSError {
+                errorPointer?.pointee = fetchError
+                return nil
+            }
+        }) { (result, error) in
             if let error = error {
                 print("Error booking time slot: \(error.localizedDescription)")
                 completion(false)
@@ -68,6 +91,7 @@ class TimeSlotRepository {
             completion(true)
         }
     }
+    
     
     // Add sample time slots for a teacher (for testing)
     func addSampleTimeSlots(for teacherId: String, completion: @escaping () -> Void) {
