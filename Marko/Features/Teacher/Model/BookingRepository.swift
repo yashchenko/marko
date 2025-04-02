@@ -10,49 +10,50 @@ import FirebaseFirestore
 
 class BookingRepository {
     private let db = Firestore.firestore()
-    
-    // Create booking with transaction to ensure data consistency
+    private let bookingsCollection = "bookings"
+    private let timeSlotsCollection = "timeSlots"
+
+    // Create booking using a transaction for atomicity
     func createBooking(teacherId: String,
-                     timeSlot: TimeSlot,
-                     userId: String,
-                     completion: @escaping (Bool, String?) -> Void) {
-        
-        // Reference to the booking document
-        let bookingRef = db.collection("bookings").document()
-        
-        // Reference to the timeSlot document
-        let timeSlotRef = db.collection("timeSlots").document(timeSlot.id)
-        
-        // Use a transaction to ensure atomicity
+                       timeSlot: TimeSlot, // The specific slot user wants to book
+                       userId: String,
+                       // Completion handler includes success status, optional booking ID, and optional error message
+                       completion: @escaping (_ success: Bool, _ bookingId: String?, _ errorMessage: String?) -> Void) {
+
+        let newBookingRef = db.collection(bookingsCollection).document()
+        let timeSlotRef = db.collection(timeSlotsCollection).document(timeSlot.id)
+        print("Repo: Starting booking transaction for TimeSlot ID: \(timeSlot.id)")
+
         db.runTransaction({ (transaction, errorPointer) -> Any? in
-            
-            // First, check if the time slot is still available
             let timeSlotSnapshot: DocumentSnapshot
             do {
+                print("Transaction [Read]: Getting TimeSlot document \(timeSlot.id)...")
                 try timeSlotSnapshot = transaction.getDocument(timeSlotRef)
             } catch let fetchError as NSError {
+                print("Transaction Error [Read]: Failed to get TimeSlot document: \(fetchError)")
                 errorPointer?.pointee = fetchError
-                return nil
+                return nil // Abort
             }
-            
-            // Verify the slot exists and is available
-            guard let timeSlotData = timeSlotSnapshot.data(),
-                  let isBooked = timeSlotData["isBooked"] as? Bool else {
-                let error = NSError(domain: "AppErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey: "Time slot not found"])
+
+            // **FIX:** Use the TimeSlot initializer that accepts DocumentSnapshot
+            guard timeSlotSnapshot.exists,
+                  let currentDbTimeSlot = TimeSlot(snapshot: timeSlotSnapshot) // Use init(snapshot:)
+            else {
+                let error = NSError(domain: "BookingErrorDomain", code: 404, userInfo: [NSLocalizedDescriptionKey: "Selected time slot could not be found."])
+                print("Transaction Error [Validate]: TimeSlot document \(timeSlot.id) not found or failed to parse.")
                 errorPointer?.pointee = error
-                return nil
+                return nil // Abort
             }
-            
-            // If already booked, return error
-            if isBooked {
-                let error = NSError(domain: "AppErrorDomain", code: -2, userInfo: [NSLocalizedDescriptionKey: "Time slot already booked"])
+
+            if currentDbTimeSlot.isBooked {
+                let error = NSError(domain: "BookingErrorDomain", code: 409, userInfo: [NSLocalizedDescriptionKey: "Sorry, this time slot was booked by someone else just now."])
+                print("Transaction Error [Check]: TimeSlot \(timeSlot.id) is already booked.")
                 errorPointer?.pointee = error
-                return nil
+                return nil // Abort
             }
-            
-            // Create the booking object
-            let booking = Booking(
-                id: bookingRef.documentID,
+
+            let newBooking = Booking(
+                id: newBookingRef.documentID,
                 teacherId: teacherId,
                 timeSlotId: timeSlot.id,
                 userId: userId,
@@ -61,142 +62,167 @@ class BookingRepository {
                 timeSlot: timeSlot,
                 status: "confirmed"
             )
-            
-            // Update the time slot as booked
+
+            print("Transaction [Write]: Updating TimeSlot \(timeSlot.id) to booked by \(userId)...")
             transaction.updateData([
                 "isBooked": true,
                 "bookedByUserId": userId
             ], forDocument: timeSlotRef)
-            
-            // Create the booking document
-            transaction.setData(booking.toDictionary, forDocument: bookingRef)
-            
-            return booking.id
+
+            print("Transaction [Write]: Creating Booking document \(newBookingRef.documentID)...")
+            transaction.setData(newBooking.firestoreData, forDocument: newBookingRef)
+
+            return newBooking.id // Return booking ID on success inside transaction
         }) { (result, error) in
-            if let error = error {
-                print("Transaction failed: \(error.localizedDescription)")
-                // Provide specific error handling based on error code
-                if let nsError = error as NSError?, nsError.code == -2 {
-                    // Handle already booked error specifically
-                    print("Time slot was already booked by someone else")
-                }
-                completion(false, nil)
-                return
+            // --- Transaction Completion ---
+            if let error = error as NSError? {
+                print("Booking Transaction failed: \(error.localizedDescription) (Code: \(error.code))")
+                let errorMessage = error.userInfo[NSLocalizedDescriptionKey] as? String ?? "An unknown error occurred during booking."
+                completion(false, nil, errorMessage)
+            } else if let bookingId = result as? String {
+                print("Booking Transaction successful! Booking ID: \(bookingId)")
+                completion(true, bookingId, nil) // Success
+            } else {
+                 print("Booking Transaction Error: Succeeded but result was not a String ID.")
+                 completion(false, nil, "Booking completed but failed to get confirmation ID.")
             }
-            
-            guard let bookingId = result as? String else {
-                completion(false, nil)
-                return
-            }
-            
-            completion(true, bookingId)
         }
     }
-    
-    // Get user's bookings
-    func fetchUserBookings(for userId: String, completion: @escaping ([Booking]) -> Void) {
-        db.collection("bookings")
-            .whereField("userId", isEqualTo: userId)
-            .getDocuments { snapshot, error in
-                if let error = error {
-                    print("Error fetching user bookings: \(error.localizedDescription)")
-                    completion([])
-                    return
-                }
-                
-                guard let documents = snapshot?.documents else {
-                    print("No bookings found")
-                    completion([])
-                    return
-                }
-                
-                let bookings = documents.compactMap { document -> Booking? in
-                    let data = document.data()
-                    
-                    // Extract the embedded timeSlot data
-                    guard let timeSlotData = data["timeSlot"] as? [String: Any],
-                          let teacherId = data["teacherId"] as? String,
-                          let timeSlotId = data["timeSlotId"] as? String,
-                          let userId = data["userId"] as? String,
-                          let paymentAmount = data["paymentAmount"] as? Double,
-                          let paymentTimestamp = data["paymentDate"] as? Timestamp,
-                          let status = data["status"] as? String,
-                          
-                          // TimeSlot data
-                          let startTimestamp = timeSlotData["startTime"] as? Timestamp,
-                          let endTimestamp = timeSlotData["endTime"] as? Timestamp,
-                          let slotTeacherId = timeSlotData["teacherId"] as? String,
-                          let id = timeSlotData["id"] as? String else {
-                        print("Missing required fields in booking document")
-                        return nil
-                    }
-                    
-                    // Reconstruct the TimeSlot
-                    let timeSlot = TimeSlot(
-                        id: id,
-                        teacherId: slotTeacherId,
-                        startTime: startTimestamp.dateValue(),
-                        endTime: endTimestamp.dateValue(),
-                        isBooked: true,
-                        bookedByUserId: userId
-                    )
-                    
-                    return Booking(
-                        id: document.documentID,
-                        teacherId: teacherId,
-                        timeSlotId: timeSlotId,
-                        userId: userId,
-                        paymentAmount: paymentAmount,
-                        paymentDate: paymentTimestamp.dateValue(),
-                        timeSlot: timeSlot,
-                        status: status
-                    )
-                }
-                
-                completion(bookings)
+
+    // Get user's bookings (Reads from 'bookings' collection)
+     func fetchUserBookings(for userId: String, completion: @escaping ([Booking]) -> Void) {
+         print("Repo: Fetching bookings for user: \(userId)")
+         db.collection(bookingsCollection)
+             .whereField("userId", isEqualTo: userId)
+             .order(by: "paymentDate", descending: true)
+             .getDocuments { snapshot, error in
+                 if let error = error {
+                     print("Error fetching user bookings for \(userId): \(error.localizedDescription)")
+                     completion([])
+                     return
+                 }
+                 guard let documents = snapshot?.documents else {
+                     print("Repo: No booking documents found for user \(userId)")
+                     completion([])
+                     return
+                 }
+                 print("Repo: Found \(documents.count) raw booking documents for user \(userId)")
+
+                 let bookings = documents.compactMap { document -> Booking? in
+                     let data = document.data()
+                     let bookingId = document.documentID
+                     // print("Repo: Parsing booking document \(bookingId)...") // Verbose log
+
+                     guard let teacherId = data["teacherId"] as? String,
+                           let timeSlotId = data["timeSlotId"] as? String,
+                           let fetchedUserId = data["userId"] as? String,
+                           let paymentAmount = data["paymentAmount"] as? Double,
+                           let paymentTimestamp = data["paymentDate"] as? Timestamp,
+                           let status = data["status"] as? String,
+                           let timeSlotData = data["timeSlot"] as? [String: Any]
+                     else {
+                         print("Repo Error: Missing or invalid top-level fields in booking \(bookingId).")
+                         return nil
+                     }
+
+                     guard let tsId = timeSlotData["id"] as? String,
+                           let tsTeacherId = timeSlotData["teacherId"] as? String,
+                           let tsStartTimeStamp = timeSlotData["startTime"] as? Timestamp,
+                           let tsEndTimeStamp = timeSlotData["endTime"] as? Timestamp,
+                           let tsIsBooked = timeSlotData["isBooked"] as? Bool
+                           // **FIX:** Removed unused 'tsPrice' causing warning
+                           // let tsPrice = timeSlotData["price"] as? Double
+                     else {
+                          print("Repo Error: Missing or invalid fields in embedded timeSlot for booking \(bookingId).")
+                          return nil
+                     }
+                       if tsId != timeSlotId { print("Warning: Mismatch between embedded timeSlot ID (\(tsId)) and booking's timeSlotId (\(timeSlotId)) for booking \(bookingId)") }
+
+                     let embeddedTimeSlot = TimeSlot(
+                         id: tsId,
+                         teacherId: tsTeacherId,
+                         startTime: tsStartTimeStamp.dateValue(),
+                         endTime: tsEndTimeStamp.dateValue(),
+                         isBooked: tsIsBooked,
+                         bookedByUserId: timeSlotData["bookedByUserId"] as? String ?? fetchedUserId
+                     )
+
+                     return Booking(
+                         id: bookingId,
+                         teacherId: teacherId,
+                         timeSlotId: timeSlotId,
+                         userId: fetchedUserId,
+                         paymentAmount: paymentAmount,
+                         paymentDate: paymentTimestamp.dateValue(),
+                         timeSlot: embeddedTimeSlot,
+                         status: status
+                     )
+                 }
+                 print("Repo: Parsed \(bookings.count) valid Booking objects for user \(userId)")
+                 completion(bookings)
+             }
+     }
+
+    // Cancel a booking (Requires updating Booking status and TimeSlot availability atomically)
+    func cancelBooking(bookingId: String, completion: @escaping (Bool, String?) -> Void) {
+        let bookingRef = db.collection(bookingsCollection).document(bookingId)
+        print("Repo: Attempting to cancel booking: \(bookingId)")
+
+        db.runTransaction({ (transaction, errorPointer) -> Any? in
+            let bookingSnapshot: DocumentSnapshot
+            do {
+                 // print("Transaction [Read]: Getting Booking document \(bookingId)...") // Verbose log
+                try bookingSnapshot = transaction.getDocument(bookingRef)
+            } catch let fetchError as NSError {
+                 print("Transaction Error [Read]: Failed to get Booking document: \(fetchError)")
+                errorPointer?.pointee = fetchError
+                return nil // Abort
             }
-    }
-    
-    // Cancel a booking
-    func cancelBooking(bookingId: String, completion: @escaping (Bool) -> Void) {
-        let bookingRef = db.collection("bookings").document(bookingId)
-        
-        // First get the booking to find the time slot
-        bookingRef.getDocument { snapshot, error in
-            if let error = error {
-                print("Error fetching booking: \(error.localizedDescription)")
-                completion(false)
-                return
+
+            guard bookingSnapshot.exists,
+                  let bookingData = bookingSnapshot.data(),
+                  let timeSlotId = bookingData["timeSlotId"] as? String,
+                  let currentStatus = bookingData["status"] as? String else {
+                let error = NSError(domain: "BookingErrorDomain", code: 404, userInfo: [NSLocalizedDescriptionKey: "Booking not found or data is incomplete."])
+                 print("Transaction Error [Validate]: Booking \(bookingId) not found or invalid.")
+                errorPointer?.pointee = error
+                return nil // Abort
             }
-            
-            guard let data = snapshot?.data(),
-                  let timeSlotId = data["timeSlotId"] as? String else {
-                print("Invalid booking data")
-                completion(false)
-                return
+
+            if currentStatus == "cancelled" {
+                 let error = NSError(domain: "BookingErrorDomain", code: 400, userInfo: [NSLocalizedDescriptionKey: "This booking has already been cancelled."])
+                 print("Transaction Error [Check]: Booking \(bookingId) already cancelled.")
+                 errorPointer?.pointee = error
+                 return nil // Abort
             }
-            
-            // Use a transaction to ensure consistency
-            self.db.runTransaction({ (transaction, errorPointer) -> Any? in
-                // Update booking status
-                transaction.updateData(["status": "cancelled"], forDocument: bookingRef)
-                
-                // Update time slot availability
-                let timeSlotRef = self.db.collection("timeSlots").document(timeSlotId)
-                transaction.updateData([
-                    "isBooked": false,
-                    "bookedByUserId": FieldValue.delete()
-                ], forDocument: timeSlotRef)
-                
-                return true
-            }) { (result, error) in
-                if let error = error {
-                    print("Error cancelling booking: \(error.localizedDescription)")
-                    completion(false)
-                    return
-                }
-                
-                completion(true)
+             if currentStatus == "completed" {
+                  let error = NSError(domain: "BookingErrorDomain", code: 400, userInfo: [NSLocalizedDescriptionKey: "Cannot cancel a completed session."])
+                  print("Transaction Error [Check]: Booking \(bookingId) already completed.")
+                  errorPointer?.pointee = error
+                  return nil // Abort
+             }
+
+            let timeSlotRef = self.db.collection(self.timeSlotsCollection).document(timeSlotId)
+
+            print("Transaction [Write]: Updating Booking \(bookingId) status to 'cancelled'...")
+            transaction.updateData(["status": "cancelled"], forDocument: bookingRef)
+
+            print("Transaction [Write]: Updating TimeSlot \(timeSlotId) to available...")
+            transaction.updateData([
+                "isBooked": false,
+                "bookedByUserId": FieldValue.delete()
+            ], forDocument: timeSlotRef)
+
+            return true // Indicate success within transaction block
+        }) { (result, error) in
+            // --- Transaction Completion ---
+            if let error = error as NSError? {
+                print("Cancel Booking Transaction failed: \(error.localizedDescription)")
+                 let errorMessage = error.userInfo[NSLocalizedDescriptionKey] as? String ?? "Could not cancel the booking due to an error."
+                 completion(false, errorMessage)
+            } else {
+                print("Cancel Booking Transaction successful for booking: \(bookingId)")
+                completion(true, nil) // Success
             }
         }
     }

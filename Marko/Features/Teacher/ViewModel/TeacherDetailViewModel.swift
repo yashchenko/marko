@@ -1,108 +1,132 @@
-//
-//  File.swift
+//  TeacherDetailViewModel.swift
 //  Marko
 //
 //  Created by Ivan on 28.02.2025.
 //
 
 import UIKit
-import Firebase
+import Firebase // Import Firestore
 
 class TeacherDetailViewModel {
     let teacher: Teacher
     private let timeSlotRepository = TimeSlotRepository()
+    private let bookingRepository = BookingRepository() // Use BookingRepository for booking logic
+
+    // Store the fetched available time slots for the currently selected date
     private(set) var availableTimeSlots: [TimeSlot] = []
-    private let bookingRepository = BookingRepository()
-    
-    
-    // Callback for when time slots are loaded
+
+    // Callback to notify ViewController when time slots are loaded/updated
     var onTimeSlotsLoaded: (([TimeSlot]) -> Void)?
-    
-    // Callback for when booking is completed
-    var onBookingCompleted: ((Bool, TimeSlot) -> Void)?
-    
+
+    // Callback to notify ViewController when a booking attempt is completed
+    // Parameters: success(Bool), message(String?), bookedTimeSlot(TimeSlot?)
+    var onBookingCompleted: ((_ success: Bool, _ message: String?, _ timeSlot: TimeSlot?) -> Void)?
+
     init(teacher: Teacher) {
         self.teacher = teacher
     }
-    
-    // Load all available time slots for this teacher
-    func loadAvailableTimeSlots() {
-        timeSlotRepository.fetchTimeSlots(for: teacher.id) { [weak self] timeSlots in
-            guard let self = self else { return }
-            
-            // Filter to only include non-booked slots in the future
-            let now = Date()
-            self.availableTimeSlots = timeSlots.filter { !$0.isBooked && $0.startTime > now }
-            
-            // Sort by start time
-            self.availableTimeSlots.sort { $0.startTime < $1.startTime }
-            
-            // Notify listeners
-            self.onTimeSlotsLoaded?(self.availableTimeSlots)
-        }
-    }
-    
-    // Load time slots for a specific date
+
+    // Load time slots for a specific date, filtering for future, available slots
     func loadTimeSlots(for date: Date) {
-        timeSlotRepository.fetchTimeSlots(for: teacher.id, on: date) { [weak self] timeSlots in
+        let requestedDate = Calendar.current.startOfDay(for: date) // Normalize date
+         print("ViewModel: Loading time slots for teacher \(teacher.id) on date \(requestedDate)")
+        timeSlotRepository.fetchTimeSlots(for: teacher.id, on: requestedDate) { [weak self] timeSlots in
             guard let self = self else { return }
-            
-            // Filter to only include non-booked slots in the future
+            print("ViewModel: Received \(timeSlots.count) slots from repository for \(requestedDate).")
+
+            // Filter for slots that are not booked and start now or in the future
             let now = Date()
-            self.availableTimeSlots = timeSlots.filter { !$0.isBooked && $0.startTime > now }
-            
-            // Sort by start time
-            self.availableTimeSlots.sort { $0.startTime < $1.startTime }
-            
-            // Notify listeners
-            self.onTimeSlotsLoaded?(self.availableTimeSlots)
+            // Use >= now to include slots starting exactly now
+            let relevantTimeSlots = timeSlots.filter { !$0.isBooked && $0.startTime >= now }
+
+            // Sort the filtered slots by their start time
+            self.availableTimeSlots = relevantTimeSlots.sorted { $0.startTime < $1.startTime }
+             print("ViewModel: Filtered to \(self.availableTimeSlots.count) available future slots.")
+
+            // Notify the ViewController on the main thread
+            DispatchQueue.main.async {
+                self.onTimeSlotsLoaded?(self.availableTimeSlots)
+            }
         }
     }
-    
-    // Book a time slot
+
+    // Initiate booking a time slot using the BookingRepository
     func bookTimeSlot(_ timeSlot: TimeSlot, userId: String) {
+        print("ViewModel: Requesting booking for slot \(timeSlot.id) by user \(userId)")
         bookingRepository.createBooking(
             teacherId: teacher.id,
             timeSlot: timeSlot,
             userId: userId
-        ) { [weak self] success, bookingId in
-            self?.onBookingCompleted?(success, timeSlot)
-            
+        ) { [weak self] success, bookingId, errorMessage in // Use the updated completion handler
+            guard let self = self else { return }
+            print("ViewModel: Booking repository result - Success: \(success), BookingID: \(bookingId ?? "N/A"), ErrorMsg: \(errorMessage ?? "None")")
+
+            let message: String?
             if success {
-                // Also trigger a notification for the teacher (via Firebase Cloud Messaging)
-                self?.sendTeacherNotification(bookingId: bookingId, timeSlot: timeSlot)
+                // Construct success message including the booking ID if available
+                let bookingIdString = bookingId != nil ? " (ID: \(bookingId!))" : ""
+                message = "Session confirmed with \(self.teacher.name) for \(timeSlot.formattedTimeSlot())!\(bookingIdString)"
+            } else {
+                // Use the error message from the repository, or a generic failure message
+                message = errorMessage ?? "Failed to book the session. The slot might have been taken, or an error occurred."
+            }
+
+            // Notify the ViewController about the booking attempt result
+            // Ensure callback is on the main thread as it might trigger UI updates indirectly
+             DispatchQueue.main.async {
+                 // Pass success status, message, and the slot (if successful) back
+                self.onBookingCompleted?(success, message, success ? timeSlot : nil)
+             }
+             // If successful, also trigger teacher notification (can remain async)
+             if success {
+                self.sendTeacherNotification(bookingId: bookingId, timeSlot: timeSlot, userId: userId)
+             }
+        }
+    }
+
+    // Add sample time slots for testing, but only if they don't seem to exist already
+    func addSampleTimeSlotsIfNeeded(completion: @escaping () -> Void) {
+        timeSlotRepository.checkIfSampleSlotsExist(for: teacher.id) { [weak self] exist in
+            guard let self = self else { completion(); return }
+            if exist {
+                print("Sample time slots likely already exist for teacher \(self.teacher.id). Skipping addition.")
+                completion() // Proceed without adding samples
+            } else {
+                print("Adding sample time slots for teacher \(self.teacher.id)...")
+                // Call the repository method to add sample data
+                self.timeSlotRepository.addSampleTimeSlots(for: self.teacher.id) {
+                    print("Sample time slots addition process completed.")
+                    completion() // Signal completion after attempting to add
+                }
             }
         }
     }
-    
-    
-    // Add sample time slots (for testing)
-    func addSampleTimeSlots(completion: @escaping () -> Void) {
-        timeSlotRepository.addSampleTimeSlots(for: teacher.id, completion: completion)
-    }
-    
-    private func sendTeacherNotification(bookingId: String?, timeSlot: TimeSlot) {
+
+    // --- Teacher Notification (Simulated) ---
+    // In a real app, this should trigger a Cloud Function to send FCM
+    private func sendTeacherNotification(bookingId: String?, timeSlot: TimeSlot, userId: String) {
         guard let bookingId = bookingId else { return }
-        
-        // This would typically be a server-side operation using Cloud Functions
-        // But for now, we can simulate by adding a notification record in Firestore
-        
+
         let db = Firestore.firestore()
+        // Create a document in a collection teachers can listen to
         let notificationRef = db.collection("teacherNotifications").document()
-        
+
         let notificationData: [String: Any] = [
             "teacherId": teacher.id,
             "bookingId": bookingId,
-            "message": "New booking received for \(timeSlot.formattedTimeSlot())",
+            "timeSlotId": timeSlot.id,
+            "userId": userId, // Include user who booked
+            "message": "New booking from user \(userId) for \(timeSlot.formattedTimeSlot())",
             "createdAt": FieldValue.serverTimestamp(),
-            "read": false
+            "isRead": false // Flag for teacher's UI
         ]
-        
+
         notificationRef.setData(notificationData) { error in
             if let error = error {
-                print("Error sending teacher notification: \(error.localizedDescription)")
+                print("Error creating teacher notification document: \(error.localizedDescription)")
             } else {
-                print("Teacher notification sent successfully")
+                print("Teacher notification document created successfully (Notification ID: \(notificationRef.documentID)).")
+                // Note: This does NOT send a push notification via FCM.
             }
         }
     }

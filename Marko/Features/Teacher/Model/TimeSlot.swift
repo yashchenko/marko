@@ -1,22 +1,21 @@
-
+//
 //  TimeSlot.swift
 //  Marko
 //
 //  Created by Ivan on 24.02.2025.
+//
 
 import UIKit
 import FirebaseFirestore
 
-struct TimeSlot: Identifiable {
-       var id: String = UUID().uuidString
-       let teacherId: String
-       let startTime: Date
-       let endTime: Date
-       var isBooked: Bool
-       var bookedByUserId: String?
-
-       // Firestore document reference (non-Codable)
-       var documentRef: DocumentReference? = nil
+struct TimeSlot: Identifiable, Equatable {
+    var id: String // Firestore Document ID
+    let teacherId: String
+    let startTime: Date
+    let endTime: Date
+    var isBooked: Bool
+    var bookedByUserId: String?
+    var documentRef: DocumentReference? = nil
 
     // Default initializer
     init(id: String = UUID().uuidString,
@@ -24,39 +23,38 @@ struct TimeSlot: Identifiable {
          startTime: Date,
          endTime: Date,
          isBooked: Bool = false,
-         bookedByUserId: String? = nil) {
+         bookedByUserId: String? = nil,
+         documentRef: DocumentReference? = nil) {
         self.id = id
         self.teacherId = teacherId
         self.startTime = startTime
         self.endTime = endTime
         self.isBooked = isBooked
         self.bookedByUserId = bookedByUserId
+        self.documentRef = documentRef
     }
 
-    // Firestore dictionary representation
-    var asDictionary: [String: Any] {
-        return [
-            "id": id,
-            "teacherId": teacherId,
-            "startTime": Timestamp(date: startTime),
-            "endTime": Timestamp(date: endTime),
-            "isBooked": isBooked,
-            "bookedByUserId": bookedByUserId ?? NSNull()
-        ]
-    }
-
-    // Create from Firestore document
+    // Initializer from Firestore QueryDocumentSnapshot (used in getDocuments)
     init?(document: QueryDocumentSnapshot) {
-        let data = document.data()
+        self.init(id: document.documentID, data: document.data(), ref: document.reference)
+    }
 
+    // **NEW:** Initializer from Firestore DocumentSnapshot (used in getDocument)
+    init?(snapshot: DocumentSnapshot) {
+        guard let data = snapshot.data() else { return nil }
+        self.init(id: snapshot.documentID, data: data, ref: snapshot.reference)
+    }
+
+    // Private common initializer logic
+    private init?(id: String, data: [String: Any], ref: DocumentReference) {
         guard
-            let id = data["id"] as? String,
             let teacherId = data["teacherId"] as? String,
             let startTimestamp = data["startTime"] as? Timestamp,
             let endTimestamp = data["endTime"] as? Timestamp,
             let isBooked = data["isBooked"] as? Bool
         else {
-            return nil
+             print("Failed to parse TimeSlot from document ID: \(id). Missing/invalid fields. Data: \(data)")
+             return nil
         }
 
         self.id = id
@@ -64,68 +62,47 @@ struct TimeSlot: Identifiable {
         self.startTime = startTimestamp.dateValue()
         self.endTime = endTimestamp.dateValue()
         self.isBooked = isBooked
-        self.bookedByUserId = data["bookedByUserId"] as? String
-        self.documentRef = document.reference
+        if let userId = data["bookedByUserId"] as? String, userId != "" {
+            self.bookedByUserId = userId
+        } else {
+            self.bookedByUserId = nil
+        }
+        self.documentRef = ref
     }
 
-    // Format time slot for display
-    func formattedTimeSlot() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE, MMM d"
-        let dayString = dateFormatter.string(from: startTime)
 
-        dateFormatter.dateFormat = "h:mm a"
-        let startTimeString = dateFormatter.string(from: startTime)
-        let endTimeString = dateFormatter.string(from: endTime)
-
-        return "\(dayString), \(startTimeString) - \(endTimeString)"
-    }
-
-    // Calculate price based on duration (in UAH)
-    func calculatePrice(hourlyRate: Double = 300.0) -> Double {
-        let duration = endTime.timeIntervalSince(startTime) / 3600 // in hours
-        return duration * hourlyRate
-    }
-}
-
-extension TimeSlot: Codable {
-    enum CodingKeys: String, CodingKey {
-        case id, teacherId, startTime, endTime, isBooked, bookedByUserId
-    }
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(String.self, forKey: .id)
-        teacherId = try container.decode(String.self, forKey: .teacherId)
-        startTime = try container.decode(Date.self, forKey: .startTime)
-        endTime = try container.decode(Date.self, forKey: .endTime)
-        isBooked = try container.decode(Bool.self, forKey: .isBooked)
-        bookedByUserId = try container.decodeIfPresent(String.self, forKey: .bookedByUserId)
-        documentRef = nil // This field isn't decoded
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(id, forKey: .id)
-        try container.encode(teacherId, forKey: .teacherId)
-        try container.encode(startTime, forKey: .startTime)
-        try container.encode(endTime, forKey: .endTime)
-        try container.encode(isBooked, forKey: .isBooked)
-        try container.encodeIfPresent(bookedByUserId, forKey: .bookedByUserId)
-        // documentRef is not encoded
-    }
-}
-
-extension TimeSlot {
-    var toDictionary: [String: Any] {
+    // Dictionary for writing to Firestore
+    var firestoreData: [String: Any] {
         return [
-            "id": id,
             "teacherId": teacherId,
             "startTime": Timestamp(date: startTime),
             "endTime": Timestamp(date: endTime),
             "isBooked": isBooked,
-            "bookedByUserId": bookedByUserId as Any,
+            "bookedByUserId": bookedByUserId as Any? ?? NSNull(),
             "price": calculatePrice()
         ]
+    }
+
+    // Formatted string for UI display
+    func formattedTimeSlot() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "E, MMM d, h:mm a"
+        let startTimeString = dateFormatter.string(from: startTime)
+        dateFormatter.dateFormat = "h:mm a"
+        let endTimeString = dateFormatter.string(from: endTime)
+        return "\(startTimeString) - \(endTimeString)"
+    }
+
+    // Price calculation
+    func calculatePrice(hourlyRate: Double = 300.0) -> Double {
+        let durationInSeconds = endTime.timeIntervalSince(startTime)
+        guard durationInSeconds > 0 else { return 0.0 }
+        let durationInHours = durationInSeconds / 3600.0
+        return (durationInHours * hourlyRate * 100).rounded() / 100
+    }
+
+    // Equatable conformance
+    static func == (lhs: TimeSlot, rhs: TimeSlot) -> Bool {
+        return lhs.id == rhs.id
     }
 }
