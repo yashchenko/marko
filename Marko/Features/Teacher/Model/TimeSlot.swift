@@ -39,7 +39,7 @@ struct TimeSlot: Identifiable, Equatable {
         self.init(id: document.documentID, data: document.data(), ref: document.reference)
     }
 
-    // **NEW:** Initializer from Firestore DocumentSnapshot (used in getDocument)
+    // Initializer from Firestore DocumentSnapshot (used in getDocument)
     init?(snapshot: DocumentSnapshot) {
         guard let data = snapshot.data() else { return nil }
         self.init(id: snapshot.documentID, data: data, ref: snapshot.reference)
@@ -56,7 +56,6 @@ struct TimeSlot: Identifiable, Equatable {
              print("Failed to parse TimeSlot from document ID: \(id). Missing/invalid fields. Data: \(data)")
              return nil
         }
-
         self.id = id
         self.teacherId = teacherId
         self.startTime = startTimestamp.dateValue()
@@ -74,6 +73,9 @@ struct TimeSlot: Identifiable, Equatable {
     // Dictionary for writing to Firestore
     var firestoreData: [String: Any] {
         return [
+            // **FIX:** Uncomment this line to include the ID in the dictionary
+            // This is needed when embedding this data within a Booking document.
+            "id": id,
             "teacherId": teacherId,
             "startTime": Timestamp(date: startTime),
             "endTime": Timestamp(date: endTime),

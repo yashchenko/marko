@@ -9,39 +9,37 @@ import UIKit
 import Firebase // Import if using Auth
 
 class ProfileViewModel {
-    var user: User
-    // Use BookingRepository to get full booking details
+    var user: User // Represents the app's user model (name, photo, level)
     private let bookingRepository = BookingRepository()
-    // Keep TeacherRepository to fetch teacher details if needed (could be optimized)
     private let teacherRepository = TeacherRepository()
-    private(set) var bookedSessions: [Booking] = [] // Store full Booking objects
-    private(set) var teachers: [String: Teacher] = [:] // Cache for teacher details
 
-    // Callback when sessions and related data are loaded
+    // **FIX:** Removed private(set) to allow modification from outside if needed,
+    // or specifically by the clearUserSessionData method now inside the class.
+    var bookedSessions: [Booking] = []
+    var teachers: [String: Teacher] = [:]
+
     var onSessionsLoaded: (() -> Void)?
 
     init(user: User) {
         self.user = user
-        // Load sessions when ViewModel is created
-        loadBookedSessions()
+        // Initial load depends on auth state, which is checked in ProfileVC's viewWillAppear/updateUI
+        // So, maybe don't load here directly, let the VC trigger it when user is confirmed logged in.
+        // loadBookedSessions() // Removed initial load from here
     }
 
     func upgradePrompt() -> String? {
-        if user.englishLevel == "B1" {
+        if user.englishLevel == "B1" { // Example logic
             return "Upgrade to B2 by purchasing 30 additional lessons!"
         }
         return nil
     }
 
-    // Load all *upcoming* confirmed booked sessions for the current user
+    // Load upcoming confirmed sessions for the *currently logged-in* Firebase user
     func loadBookedSessions() {
-        // Use Firebase Auth to get the real user ID
         guard let userId = Auth.auth().currentUser?.uid else {
-             print("User not logged in, cannot load profile sessions.")
-             self.bookedSessions = [] // Clear existing
-             DispatchQueue.main.async { // Notify UI on main thread
-                self.onSessionsLoaded?()
-             }
+             print("ProfileViewModel Error: Cannot load sessions, user not logged in.")
+             // Ensure data is cleared if user logs out and this is called somehow
+             clearUserSessionData() // Call clear method to reset state
              return
          }
 
@@ -50,62 +48,69 @@ class ProfileViewModel {
             guard let self = self else { return }
             print("ProfileViewModel: Received \(bookings.count) bookings from repository.")
 
-            // Filter for upcoming confirmed sessions and sort by start time
             let now = Date()
             self.bookedSessions = bookings
                 .filter { $0.status == "confirmed" && $0.timeSlot.startTime > now }
                 .sorted { $0.timeSlot.startTime < $1.timeSlot.startTime }
             print("ProfileViewModel: Filtered to \(self.bookedSessions.count) upcoming confirmed sessions.")
 
-            // Load teacher details needed for these booked sessions
-            self.loadTeacherDetails(for: self.bookedSessions)
+            self.loadTeacherDetails(for: self.bookedSessions) // Load associated teacher info
         }
     }
 
-    // Load teacher details for the booked sessions
-    // Optimization: This currently fetches *all* teachers every time.
-    // A better approach would be fetchTeachersByIds if the number of teachers is large.
+    // Load teacher details needed for the currently loaded bookings
     private func loadTeacherDetails(for bookings: [Booking]) {
         let requiredTeacherIds = Set(bookings.map { $0.teacherId })
         print("ProfileViewModel: Requiring teacher details for IDs: \(requiredTeacherIds)")
-
         guard !requiredTeacherIds.isEmpty else {
             print("ProfileViewModel: No teacher details required.")
-            // No teachers needed, sessions are ready (though might lack teacher names)
+            // If no details needed, still notify that loading (of sessions) is complete
             DispatchQueue.main.async { self.onSessionsLoaded?() }
             return
         }
 
-        // Fetch all teachers (assuming repository handles caching or efficiency)
+        // Simple approach: Fetch all teachers and filter/cache
+        // Improvement: Fetch only required IDs if TeacherRepository supports it
         teacherRepository.fetchTeachers { [weak self] allTeachers in
             guard let self = self else { return }
-            print("ProfileViewModel: Received \(allTeachers.count) teachers from repository for detail lookup.")
-            var updated = false
+            print("ProfileViewModel: Received \(allTeachers.count) teachers for detail lookup.")
+            var updatedCache = false
             for teacher in allTeachers {
-                if requiredTeacherIds.contains(teacher.id) && self.teachers[teacher.id] == nil {
-                    self.teachers[teacher.id] = teacher
-                    updated = true
-                    print("ProfileViewModel: Cached details for teacher \(teacher.name)")
+                if requiredTeacherIds.contains(teacher.id) {
+                    // Add or update teacher in cache
+                    if self.teachers[teacher.id]?.name != teacher.name { // Example check if update needed
+                        self.teachers[teacher.id] = teacher
+                        updatedCache = true
+                    } else if self.teachers[teacher.id] == nil {
+                         self.teachers[teacher.id] = teacher
+                         updatedCache = true
+                    }
                 }
             }
-             if updated { print("ProfileViewModel: Teacher cache updated.") }
+             if updatedCache { print("ProfileViewModel: Teacher cache updated.") }
 
-            // Notify that sessions (and hopefully teacher details) are ready
+            // Notify UI that data loading process is complete
             DispatchQueue.main.async { self.onSessionsLoaded?() }
         }
     }
 
-
-    // Get the next booked session info
+    // Get display string for the next session
     func getNextSessionInfo() -> String? {
-        // Use the already filtered and sorted bookedSessions
-        guard let nextBooking = bookedSessions.first else {
-            return nil // No upcoming sessions
-        }
-
-        // Try to get teacher name from cache
-        let teacherName = teachers[nextBooking.teacherId]?.name ?? "Teacher" // Fallback name
-
+        guard let nextBooking = bookedSessions.first else { return nil }
+        let teacherName = teachers[nextBooking.teacherId]?.name ?? "Teacher"
         return "Next session with \(teacherName) on \(nextBooking.timeSlot.formattedTimeSlot())"
+    }
+
+    // **FIX:** Moved this method inside the class definition
+    // Method to clear user-specific data (e.g., on sign out)
+    func clearUserSessionData() {
+         print("ProfileViewModel: Clearing user session data.")
+         self.bookedSessions = []
+         self.teachers = [:] // Clear teacher cache too
+         // Notify UI immediately after clearing, if appropriate
+         // The onSessionsLoaded callback is often used for this.
+         DispatchQueue.main.async {
+              self.onSessionsLoaded?()
+         }
     }
 }

@@ -1,3 +1,4 @@
+//
 //  Booking.swift
 //  Marko
 //
@@ -25,11 +26,11 @@ struct Booking: Identifiable {
         return [
             // We don't store 'id' field inside the document, as the document ID is the id.
             "teacherId": teacherId,
-            "timeSlotId": timeSlotId, // Store the link to the TimeSlot document
+            "timeSlotId": timeSlotId, // **FIX:** It's good practice to store the linked ID too
             "userId": userId,
             "paymentAmount": paymentAmount,
             "paymentDate": Timestamp(date: paymentDate), // Use Firestore Timestamp
-            // Embed the dictionary representation of the TimeSlot
+            // **FIX:** Embed the dictionary representation of the TimeSlot - ONLY ONCE
             "timeSlot": timeSlot.firestoreData,
             "status": status
         ]

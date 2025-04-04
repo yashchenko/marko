@@ -125,7 +125,7 @@ class BookingRepository {
                          return nil
                      }
 
-                     guard let tsId = timeSlotData["id"] as? String,
+                     guard let tsId = timeSlotData["id"] as? String, // <<< PROBLEM IS LIKELY HERE
                            let tsTeacherId = timeSlotData["teacherId"] as? String,
                            let tsStartTimeStamp = timeSlotData["startTime"] as? Timestamp,
                            let tsEndTimeStamp = timeSlotData["endTime"] as? Timestamp,
@@ -133,7 +133,7 @@ class BookingRepository {
                            // **FIX:** Removed unused 'tsPrice' causing warning
                            // let tsPrice = timeSlotData["price"] as? Double
                      else {
-                          print("Repo Error: Missing or invalid fields in embedded timeSlot for booking \(bookingId).")
+                          print("Repo Error: Missing or invalid fields in embedded timeSlot for booking \(bookingId).") // <<< THIS ERROR IS HIT
                           return nil
                      }
                        if tsId != timeSlotId { print("Warning: Mismatch between embedded timeSlot ID (\(tsId)) and booking's timeSlotId (\(timeSlotId)) for booking \(bookingId)") }
