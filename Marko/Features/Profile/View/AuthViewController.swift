@@ -8,7 +8,6 @@
 import UIKit
 import Firebase // Import Firebase Auth
 
-// **THIS IS THE ONLY DEFINITION THAT SHOULD EXIST**
 // Protocol to notify the presenter when authentication is complete
 protocol AuthViewControllerDelegate: AnyObject {
     func didCompleteAuth(firebaseUser: FirebaseAuth.User) // Pass the Firebase User object

@@ -7,10 +7,9 @@
 
 import UIKit
 import FSCalendar
-import PassKit // For Apple Pay
-import Firebase // For Auth and Firestore
+import PassKit
+import Firebase
 
-// **FIX:** Add PKPaymentAuthorizationViewControllerDelegate conformance here
 class TeacherDetailViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource, PKPaymentAuthorizationViewControllerDelegate {
     private let viewModel: TeacherDetailViewModel
     private let scrollView = UIScrollView()
@@ -24,13 +23,13 @@ class TeacherDetailViewController: UIViewController, FSCalendarDelegate, FSCalen
     private let teacherRankLabel = UILabel()
     private let appointmentSlotsStackView = UIStackView()
 
-    // State variables for handling Apple Pay flow
-    private var selectedDate: Date = Date()
+    // State variables
+    private var selectedDate: Date = Date() // Default to today
     private var timeSlotBeingBooked: TimeSlot?
     private var bookingResultStatus: PKPaymentAuthorizationStatus?
     private var bookingResultMessage: String?
 
-    // Date Formatter for compatibility with iOS 14
+    // Date Formatter
     private lazy var shortDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
@@ -69,14 +68,18 @@ class TeacherDetailViewController: UIViewController, FSCalendarDelegate, FSCalen
         setupAppointmentSlotsSection()
         selectDate(Date()) // Select today initially
 
-        viewModel.addSampleTimeSlotsIfNeeded { [weak self] in
-             guard let self = self else { return }
-             print("Sample slots checked/added. Loading actual slots for selected date: \(self.shortDateFormatter.string(from: self.selectedDate))")
-             self.viewModel.loadTimeSlots(for: self.selectedDate)
+        // **MODIFIED:** Call sample data setup, then load slots in completion
+        print("Checking/Setting up sample data...")
+        viewModel.ensureSampleDataExists { [weak self] in
+            // This completion block runs after ensureSampleDataExists is done
+            guard let self = self else { return }
+            print("Sample data setup complete. Loading actual slots for selected date: \(self.shortDateFormatter.string(from: self.selectedDate))")
+            // Now call loadTimeSlots with the ViewController's selectedDate
+            self.viewModel.loadTimeSlots(for: self.selectedDate)
         }
     }
 
-    // MARK: - UI Setup Helpers
+    // MARK: - UI Setup Helpers (Keep as is)
     private func setupScrollView() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(scrollView)
@@ -154,12 +157,10 @@ class TeacherDetailViewController: UIViewController, FSCalendarDelegate, FSCalen
         contentStackView.addArrangedSubview(appointmentSlotsStackView)
     }
 
-    // MARK: - UI Update Logic
+    // MARK: - UI Update Logic (Keep as is)
     private func updateTimeSlotsUI(_ timeSlots: [TimeSlot]) {
-        // **FIX:** Use DateFormatter for compatibility
         let dateString = shortDateFormatter.string(from: selectedDate)
         print("Updating UI with \(timeSlots.count) time slots for date: \(dateString)")
-
         appointmentSlotsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
         if timeSlots.isEmpty {
@@ -188,9 +189,10 @@ class TeacherDetailViewController: UIViewController, FSCalendarDelegate, FSCalen
         }
     }
 
-    // MARK: - FSCalendar Delegate & DataSource
+    // MARK: - FSCalendar Delegate & DataSource (Keep as is)
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         selectDate(date)
+        // Trigger loading slots for the newly selected date
         viewModel.loadTimeSlots(for: selectedDate)
     }
 
@@ -203,35 +205,33 @@ class TeacherDetailViewController: UIViewController, FSCalendarDelegate, FSCalen
     private func selectDate(_ date: Date) {
         selectedDate = Calendar.current.startOfDay(for: date)
         print("Selected date updated to: \(shortDateFormatter.string(from: selectedDate))")
+        // Update calendar selection appearance if needed
+        calendar.select(selectedDate, scrollToDate: true)
     }
 
-    // MARK: - Apple Pay Handling
+
+    // MARK: - Apple Pay Handling (Keep as is)
     private func handleApplePayRequest(for timeSlot: TimeSlot) {
         bookingResultStatus = nil
         bookingResultMessage = nil
         timeSlotBeingBooked = timeSlot
-
         guard PKPaymentAuthorizationViewController.canMakePayments() else {
             showSimpleAlert(title: "Apple Pay Unavailable", message: "This device cannot make Apple Pay payments or it's not set up.")
             return
         }
-
         let paymentRequest = PKPaymentRequest()
         paymentRequest.merchantIdentifier = "merchant.com.marko.languageapp" // ** YOUR MERCHANT ID **
         paymentRequest.supportedNetworks = [.visa, .masterCard, .amex]
         paymentRequest.merchantCapabilities = .capability3DS
         paymentRequest.countryCode = "UA"
         paymentRequest.currencyCode = "UAH"
-
         let lessonPrice = NSDecimalNumber(value: timeSlot.calculatePrice())
         let lessonLabel = "Lesson: \(timeSlot.formattedTimeSlot())"
         let lessonItem = PKPaymentSummaryItem(label: lessonLabel, amount: lessonPrice, type: .final)
         let totalLabel = "Total (Marko School)"
         let totalItem = PKPaymentSummaryItem(label: totalLabel, amount: lessonPrice, type: .final)
         paymentRequest.paymentSummaryItems = [lessonItem, totalItem]
-
         if let paymentVC = PKPaymentAuthorizationViewController(paymentRequest: paymentRequest) {
-            // **FIX:** Ensure delegate is set correctly after adding conformance
             paymentVC.delegate = self
             print("Presenting Apple Pay sheet for slot \(timeSlot.id)...")
             present(paymentVC, animated: true, completion: nil)
@@ -241,7 +241,7 @@ class TeacherDetailViewController: UIViewController, FSCalendarDelegate, FSCalen
         }
     }
 
-    // MARK: - PKPaymentAuthorizationViewControllerDelegate Methods (iOS 11+)
+    // MARK: - PKPaymentAuthorizationViewControllerDelegate Methods (Keep as is)
     func paymentAuthorizationViewController(_ controller: PKPaymentAuthorizationViewController,
                                             didAuthorizePayment payment: PKPayment,
                                             handler completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
@@ -253,27 +253,25 @@ class TeacherDetailViewController: UIViewController, FSCalendarDelegate, FSCalen
         }
         guard let userId = Auth.auth().currentUser?.uid else {
             print("Error: User is not logged in. Cannot proceed with booking.")
-            // **FIX:** Use standard NSError for custom error message
             let error = NSError(domain: "MarkoAppErrorDomain", code: 101, userInfo: [NSLocalizedDescriptionKey: "You must be logged in to book a session."])
             completion(PKPaymentAuthorizationResult(status: .failure, errors: [error]))
             return
         }
-
         print("Attempting to book time slot \(slotToBook.id) for user \(userId)")
         viewModel.bookTimeSlot(slotToBook, userId: userId)
         storePaymentTokenDetails(payment.token, for: slotToBook.id, userId: userId)
-        completion(PKPaymentAuthorizationResult(status: .success, errors: nil)) // Let sheet proceed
+        completion(PKPaymentAuthorizationResult(status: .success, errors: nil))
     }
 
     func paymentAuthorizationViewControllerDidFinish(_ controller: PKPaymentAuthorizationViewController) {
         print("Payment sheet finished.")
         controller.dismiss(animated: true) { [weak self] in
             print("Dismiss complete. Checking booking result...")
-            self?.showBookingResultAlert() // Show result *after* dismissal
+            self?.showBookingResultAlert()
         }
     }
 
-    // MARK: - Alert Presentation
+    // MARK: - Alert Presentation (Keep as is)
     private func showSimpleAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -292,24 +290,20 @@ class TeacherDetailViewController: UIViewController, FSCalendarDelegate, FSCalen
              if timeSlotBeingBooked != nil { timeSlotBeingBooked = nil }
             return
          }
-
         let title = (status == .success) ? "Booking Confirmed!" : "Booking Failed"
-        // **FIX:** Correctly use ?? on optional String?. Warning likely spurious if logic is correct.
         let message = bookingResultMessage ?? ((status == .success) ? "Your session is booked." : "Could not complete the booking.")
-
         print("Showing booking result alert: Title='\(title)', Message='\(message)'")
         showSimpleAlert(title: title, message: message)
-
         if status == .success {
             print("Booking successful, refreshing time slots for the selected date.")
-            viewModel.loadTimeSlots(for: selectedDate)
+            viewModel.loadTimeSlots(for: selectedDate) // Refresh UI
         }
         bookingResultStatus = nil
         bookingResultMessage = nil
         timeSlotBeingBooked = nil
     }
 
-    // MARK: - Payment Token Storage (Example)
+    // MARK: - Payment Token Storage (Keep as is)
     private func storePaymentTokenDetails(_ token: PKPaymentToken, for timeSlotId: String, userId: String) {
         let db = Firestore.firestore()
         let paymentRef = db.collection("payments").document()
@@ -334,8 +328,7 @@ class TeacherDetailViewController: UIViewController, FSCalendarDelegate, FSCalen
     }
 }
 
-// MARK: - Legacy PKPaymentAuthorizationViewControllerDelegate (Pre-iOS 11)
-// If supporting < iOS 11 (unlikely for target 14.4), keep this. Otherwise, can be removed.
+// MARK: - Legacy PKPaymentAuthorizationViewControllerDelegate (Keep as is or remove if not needed)
 extension TeacherDetailViewController {
      func paymentAuthorizationViewController(_ controller: PKPaymentAuthorizationViewController,
                                              didAuthorizePayment payment: PKPayment,
@@ -354,6 +347,6 @@ extension TeacherDetailViewController {
          print("Attempting to book slot \(slotToBook.id) for user \(userId) (Legacy)")
          viewModel.bookTimeSlot(slotToBook, userId: userId)
          storePaymentTokenDetails(payment.token, for: slotToBook.id, userId: userId)
-         completion(.success) // Let sheet proceed
+         completion(.success)
      }
 }

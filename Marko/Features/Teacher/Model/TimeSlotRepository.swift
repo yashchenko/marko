@@ -83,6 +83,7 @@ class TimeSlotRepository {
 
     // Add sample time slots for a teacher (for testing) - Use TimeSlot.id as Document ID
     // Uses batch write for efficiency.
+    #if DEBUG
     func addSampleTimeSlots(for teacherId: String, completion: @escaping () -> Void) {
         let calendar = Calendar.current
         // Start samples from today's date
@@ -143,23 +144,31 @@ class TimeSlotRepository {
     }
 
     // Helper to quickly check if *any* slots exist for a teacher (to avoid adding samples repeatedly)
-     func checkIfSampleSlotsExist(for teacherId: String, completion: @escaping (Bool) -> Void) {
-         db.collection(timeSlotsCollection)
-             .whereField("teacherId", isEqualTo: teacherId)
-             .limit(to: 1) // We only need to know if at least one exists
-             .getDocuments { snapshot, error in
-                 if let error = error {
-                     print("Error checking for existing slots for teacher \(teacherId): \(error.localizedDescription)")
-                     completion(false) // Assume they don't exist on error
-                     return
-                 }
-                 // If snapshot is not nil and not empty, then slots exist
-                 let exists = snapshot?.isEmpty == false
-                 print("Repo: Check if slots exist for teacher \(teacherId): \(exists)")
-                 completion(exists)
-             }
-     }
+//     func checkIfSampleSlotsExist(for teacherId: String, completion: @escaping (Bool) -> Void) {
+//         db.collection(timeSlotsCollection)
+//             .whereField("teacherId", isEqualTo: teacherId)
+//             .limit(to: 1) // We only need to know if at least one exists
+//             .getDocuments { snapshot, error in
+//                 if let error = error {
+//                     print("Error checking for existing slots for teacher \(teacherId): \(error.localizedDescription)")
+//                     completion(false) // Assume they don't exist on error
+//                     return
+//                 }
+//                 // If snapshot is not nil and not empty, then slots exist
+//                 let exists = snapshot?.isEmpty == false
+//                 print("Repo: Check if slots exist for teacher \(teacherId): \(exists)")
+//                 completion(exists)
+//             }
+//     }
 
+    
+    // In TimeSlotRepository.swift
+    func checkIfSampleSlotsExist(for teacherId: String, completion: @escaping (Bool) -> Void) {
+        print("Repo: Forcing sample slot check to return FALSE for testing.")
+        completion(false) // FORCE FALSE
+    }
+    #endif
+    
     // Get user's booked sessions - relies on TimeSlot having bookedByUserId field populated
     func fetchUserBookings(for userId: String, completion: @escaping ([TimeSlot]) -> Void) {
          print("Repo: Fetching booked time slots for user: \(userId)")
