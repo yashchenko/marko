@@ -18,6 +18,8 @@ class TeacherListViewModel {
     init() {
         print("TeacherListViewModel initialized")
         loadTeachers() // Load teachers on initialization
+        print("2. VIEWMODEL: Я только что был создан. Теперь я загружу учителей.")
+
     }
 
     func loadTeachers() {
@@ -28,9 +30,13 @@ class TeacherListViewModel {
             // Sort teachers, e.g., alphabetically by name
             self.teachers = fetchedTeachers.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
             print("TeacherListViewModel: Processed and stored \(self.teachers.count) sorted teachers.")
+            print("3. VIEWMODEL: Я запрашиваю учителей у Repository.")
+
             // Notify the ViewController on the main thread
             DispatchQueue.main.async {
-                 self.onTeachersLoaded?()
+                self.onTeachersLoaded?()
+                print("6. VIEWMODEL: Репозиторий предоставил мне учителей! Я скажу View обновить.")
+
             }
         }
     }
