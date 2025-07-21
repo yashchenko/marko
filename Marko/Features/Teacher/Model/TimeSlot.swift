@@ -73,8 +73,6 @@ struct TimeSlot: Identifiable, Equatable {
     // Dictionary for writing to Firestore
     var firestoreData: [String: Any] {
         return [
-            // **FIX:** Uncomment this line to include the ID in the dictionary
-            // This is needed when embedding this data within a Booking document.
             "id": id,
             "teacherId": teacherId,
             "startTime": Timestamp(date: startTime),

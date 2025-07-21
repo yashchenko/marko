@@ -20,9 +20,11 @@ class TeacherListViewController: UIViewController, UICollectionViewDelegate, UIC
         viewModel.onTeachersLoaded = { [weak self] in
             print("Teachers loaded notification received: \(self?.viewModel.teachers.count ?? 0) teachers")
             DispatchQueue.main.async {
-                 print("Reloading collection view data on main thread.")
-                 self?.loadingIndicator.stopAnimating() // Hide indicator
-                 self?.collectionView.reloadData()
+                print("Reloading collection view data on main thread.")
+                self?.loadingIndicator.stopAnimating() // Hide indicator
+                self?.collectionView.reloadData()
+                print("7. VIEW: ViewModel сообщил мне, что учителя готовы. Теперь я перезагружу коллекционный вид!")
+
             }
         }
     }
@@ -37,7 +39,12 @@ class TeacherListViewController: UIViewController, UICollectionViewDelegate, UIC
         view.backgroundColor = .systemBackground // Use system color
         setupCollectionView()
         setupLoadingIndicator()
-        loadingIndicator.startAnimating() // Show indicator until data loads
+        loadingIndicator.startAnimating()
+        print("1. VIEW: Экран со списком учителей загружен. Мне нужны учителя.")
+
+        
+        
+        // Show indicator until data loads
         // Data loading is triggered in ViewModel's init
     }
 
