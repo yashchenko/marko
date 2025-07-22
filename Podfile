@@ -7,4 +7,5 @@ target 'Marko' do
   pod 'FirebaseFirestore', '~> 8.0'
   pod 'Firebase/Storage', '~> 8.0'  # For teacher photos
   pod 'FirebaseAuth', '~> 8.0'
+  pod 'Kingfisher', '~> 6.0'
 end
