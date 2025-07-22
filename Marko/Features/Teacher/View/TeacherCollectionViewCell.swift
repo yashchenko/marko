@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class TeacherCollectionViewCell: UICollectionViewCell {
 
@@ -87,17 +88,29 @@ class TeacherCollectionViewCell: UICollectionViewCell {
             // subjectLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -padding)
         ])
     }
-
+    
     func configure(with teacher: Teacher) {
-        imageView.image = teacher.profileImage
+        
         nameLabel.text = teacher.name
         subjectLabel.text = teacher.subject
-        // print("Configured cell for \(teacher.name)") // Optional debug log
+        
+        let url = URL(string: teacher.profileImageURL)
+        
+        let placeholder = UIImage(systemName: "person.crop.circle.fill")
+        
+        // Tell Kingfisher to load the image from the URL into our imageView
+        imageView.kf.setImage(with: url, placeholder: placeholder)
+        
     }
 
+    // New prepareForReuse function
     override func prepareForReuse() {
         super.prepareForReuse()
-        // Reset content for reuse
+
+        // This is important! It stops any unfinished download before the cell is reused.
+        imageView.kf.cancelDownloadTask()
+
+        // Reset the rest of the content
         imageView.image = nil
         nameLabel.text = nil
         subjectLabel.text = nil

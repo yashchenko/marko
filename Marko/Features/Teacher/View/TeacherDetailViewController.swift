@@ -9,6 +9,7 @@ import UIKit
 import FSCalendar
 import PassKit
 import Firebase
+import Kingfisher
 
 class TeacherDetailViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource, PKPaymentAuthorizationViewControllerDelegate {
     private let viewModel: TeacherDetailViewModel
@@ -107,7 +108,9 @@ class TeacherDetailViewController: UIViewController, FSCalendarDelegate, FSCalen
         ])
 
         // --- Add Teacher Info ---
-        teacherImageView.image = viewModel.teacher.profileImage
+        let url = URL(string: viewModel.teacher.profileImageURL)
+        let placeholder = UIImage(systemName: "person.crop.square.fill")
+        teacherImageView.kf.setImage(with: url, placeholder: placeholder)
         teacherImageView.contentMode = .scaleAspectFill
         teacherImageView.layer.cornerRadius = 10
         teacherImageView.clipsToBounds = true
