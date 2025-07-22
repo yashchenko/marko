@@ -52,6 +52,19 @@ class ProfileViewController: UIViewController, AuthViewControllerDelegate {
         return button
     }()
 
+    private let findTeacherButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Find a Teacher", for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        button.backgroundColor = .systemGreen // A different color to stand out
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 8
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(handleFindTeacherTapped), for: .touchUpInside)
+        button.isHidden = true // AC #2: Hidden by default
+        return button
+    }()
+
     // --- Initialization ---
     init(viewModel: ProfileViewModel) {
         self.viewModel = viewModel
@@ -129,6 +142,7 @@ class ProfileViewController: UIViewController, AuthViewControllerDelegate {
          contentView.addSubview(bookedSessionsStackView)
          contentView.addSubview(authButton)
          contentView.addSubview(signOutButton)
+         contentView.addSubview(findTeacherButton)
 
          // --- Configure elements ---
          photoImageView.contentMode = .scaleAspectFill
@@ -213,7 +227,12 @@ class ProfileViewController: UIViewController, AuthViewControllerDelegate {
              signOutButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
              signOutButton.heightAnchor.constraint(equalToConstant: 44),
               // ** Pin Sign Out button to BOTTOM of contentView **
-             signOutButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -standardPadding)
+             signOutButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -standardPadding),
+            
+            findTeacherButton.topAnchor.constraint(equalTo: bookedSessionsStackView.bottomAnchor, constant: 20),
+            findTeacherButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            findTeacherButton.widthAnchor.constraint(equalToConstant: 200),
+            findTeacherButton.heightAnchor.constraint(equalToConstant: 44),
          ])
     }
 
@@ -303,26 +322,30 @@ class ProfileViewController: UIViewController, AuthViewControllerDelegate {
 
     private func updateBookedSessions() {
          print("ProfileVC: Updating booked sessions list view. Count: \(viewModel.bookedSessions.count)")
+        // New updateBookedSessions()
         bookedSessionsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
         if viewModel.bookedSessions.isEmpty {
-             let noSessionsLabel = UILabel()
-             noSessionsLabel.text = "You haven't booked any upcoming sessions yet."
-             noSessionsLabel.textColor = .secondaryLabel
-             noSessionsLabel.textAlignment = .center
-             noSessionsLabel.font = UIFont.systemFont(ofSize: 15)
-             // Add label directly to stack view
-             bookedSessionsStackView.addArrangedSubview(noSessionsLabel)
+            // Show the label AND the button
+            let noSessionsLabel = UILabel()
+            noSessionsLabel.text = "You haven't booked any upcoming sessions yet."
+            noSessionsLabel.textColor = .secondaryLabel
+            noSessionsLabel.textAlignment = .center
+            noSessionsLabel.font = UIFont.systemFont(ofSize: 15)
+            bookedSessionsStackView.addArrangedSubview(noSessionsLabel)
+            
+            findTeacherButton.isHidden = false // Make the button visible
+            
         } else {
+            // Hide the button and show the sessions
+            findTeacherButton.isHidden = true // Make the button hidden
+            
             for booking in viewModel.bookedSessions {
                 print("ProfileVC: Creating session view for booking ID \(booking.id)")
                 let sessionView = createSessionView(for: booking)
                 bookedSessionsStackView.addArrangedSubview(sessionView)
             }
         }
-         // Ensure the stack view and its parents are visible
-          bookedSessionsStackView.isHidden = viewModel.bookedSessions.isEmpty && Auth.auth().currentUser != nil // Hide stack if logged in but no sessions
-          sessionsLabel.isHidden = bookedSessionsStackView.isHidden // Hide title if stack is hidden
     }
 
     // createSessionView remains the same as the previous corrected version
@@ -408,6 +431,12 @@ class ProfileViewController: UIViewController, AuthViewControllerDelegate {
             print("Error signing out: %@", signOutError)
             showSimpleAlert(title: "Sign Out Error", message: signOutError.localizedDescription)
         }
+    }
+    
+    @objc private func handleFindTeacherTapped() {
+        print("Find a Teacher button tapped.")
+        // Access the tab bar controller and set its selected index to 0 (the first tab)
+        self.tabBarController?.selectedIndex = 0
     }
 
     // --- AuthViewControllerDelegate (Keep as is) ---
