@@ -36,12 +36,12 @@ class ProfileViewModel {
 
     // Load upcoming confirmed sessions for the *currently logged-in* Firebase user
     func loadBookedSessions() {
-        guard let userId = Auth.auth().currentUser?.uid else {
-             print("ProfileViewModel Error: Cannot load sessions, user not logged in.")
-             // Ensure data is cleared if user logs out and this is called somehow
-             clearUserSessionData() // Call clear method to reset state
-             return
-         }
+        
+        guard let userId = AuthService.shared.currentUser?.uid else {
+                 print("ProfileViewModel Error: Cannot load sessions, user not logged in.")
+                 clearUserSessionData()
+                 return
+        }
 
         print("ProfileViewModel: Loading booked sessions for user \(userId)")
         bookingRepository.fetchUserBookings(for: userId) { [weak self] bookings in

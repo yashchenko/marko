@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2E90B0D6C4BEFA7B765D92F4 /* Pods_Marko.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC6CD6B236374CDB251DE99F /* Pods_Marko.framework */; };
 		FA3E24422D71202900BF370F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA3E24412D71202900BF370F /* GoogleService-Info.plist */; };
+		FA47FA5A2E5978AE00FE2906 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA47FA592E5978AE00FE2906 /* AuthService.swift */; };
 		FA5026CC2D950B9800F6FEB7 /* Booking.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5026CB2D950B9800F6FEB7 /* Booking.swift */; };
 		FA5026CF2D950BD500F6FEB7 /* BookingRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5026CE2D950BD500F6FEB7 /* BookingRepository.swift */; };
 		FA644BDE2D7257BC008DC0EC /* TeacherDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA644BDD2D7257BC008DC0EC /* TeacherDetailViewController.swift */; };
@@ -44,6 +45,7 @@
 		9EB5212A5F71ACF867BFD6E0 /* Pods-Marko.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Marko.release.xcconfig"; path = "Target Support Files/Pods-Marko/Pods-Marko.release.xcconfig"; sourceTree = "<group>"; };
 		EC6CD6B236374CDB251DE99F /* Pods_Marko.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Marko.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA3E24412D71202900BF370F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FA47FA592E5978AE00FE2906 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		FA5026CB2D950B9800F6FEB7 /* Booking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Booking.swift; sourceTree = "<group>"; };
 		FA5026CE2D950BD500F6FEB7 /* BookingRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingRepository.swift; sourceTree = "<group>"; };
 		FA644BDD2D7257BC008DC0EC /* TeacherDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherDetailViewController.swift; sourceTree = "<group>"; };
@@ -245,6 +247,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		FA47FA582E59789300FE2906 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				FA47FA592E5978AE00FE2906 /* AuthService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		FA7111652D73C03500587913 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -285,6 +295,7 @@
 		FA8A1E1C2D6BFAC100BFC55F /* Marko */ = {
 			isa = PBXGroup;
 			children = (
+				FA47FA582E59789300FE2906 /* Services */,
 				FA92F64B2D9E4ED2005B6AE3 /* Extensions */,
 				FA1CCD172D73463C0091C355 /* Coordinators */,
 				FA1CCD182D7346A20091C355 /* Models */,
@@ -439,6 +450,7 @@
 				FA70541A2D9D950800AF849E /* AuthViewController.swift in Sources */,
 				FA8A1E372D6BFC5800BFC55F /* MainTabCoordinator.swift in Sources */,
 				FA675E7D2D6E71B40087483C /* WordsMemoCoordinator.swift in Sources */,
+				FA47FA5A2E5978AE00FE2906 /* AuthService.swift in Sources */,
 				FA5026CF2D950BD500F6FEB7 /* BookingRepository.swift in Sources */,
 				FA644BE12D7257F1008DC0EC /* AppointmentSlotView.swift in Sources */,
 				FAC9D6522D84FE1200DC75C9 /* TimeSlotRepository.swift in Sources */,
