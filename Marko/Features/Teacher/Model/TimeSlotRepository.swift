@@ -173,7 +173,7 @@ class TimeSlotRepository {
     func fetchUserBookings(for userId: String, completion: @escaping ([TimeSlot]) -> Void) {
          print("Repo: Fetching booked time slots for user: \(userId)")
          db.collection(timeSlotsCollection)
-             .whereField("bookedByUserId", isEqualTo: userId)
+            .whereField("bookedBy", isEqualTo: userId)
              .whereField("isBooked", isEqualTo: true) // Explicitly check if marked as booked
              // Optional: Order by time
              .order(by: "startTime", descending: false)

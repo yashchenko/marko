@@ -15,14 +15,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        FirebaseApp.configure()
-        
+
+        // Ensure Firebase is only configured once.
+        if FirebaseApp.app() == nil {
+            FirebaseApp.configure()
+        }
+
+        // Initialize auth service after Firebase is configured.
         let _ = AuthService.shared
-        
+
+        // --- TEMPORARY HACK TO SIGN OUT (keep only for local testing) ---
+        #if DEBUG
+        do {
+            try Auth.auth().signOut()
+            print("Successfully signed out on launch for testing.")
+        } catch {
+            print("Error signing out on launch: \(error.localizedDescription)")
+        }
+        #endif
+        // ------------------------------------
+
         return true
-        
-        
     }
+
 
     // MARK: UISceneSession Lifecycle
 
