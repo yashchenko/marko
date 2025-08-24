@@ -273,7 +273,7 @@ class ProfileViewController: UIViewController, AuthViewControllerDelegate {
              // Update static content
              nameLabel.text = currentUser.email
              photoImageView.image = UIImage(systemName: "person.crop.circle.fill")
-             levelLabel.text = "English Level: \(viewModel.user.englishLevel)"
+            levelLabel.text = "English Level: \(viewModel.user?.englishLevel ?? "—")"
              if let prompt = viewModel.upgradePrompt() {
                  upgradePromptLabel.text = prompt
                  upgradePromptLabel.isHidden = false
