@@ -5,9 +5,14 @@ import UIKit
 class MainViewController: UIViewController {
 
     // MARK: - Properties
-    private lazy var teachersVC = UIViewController() // Placeholder
-    private lazy var wordsVC = UIViewController()   // Placeholder
-    private lazy var profileVC = UIViewController()  // Placeholder
+    private lazy var teacherListVC: TeacherListViewController = {
+        let viewModel = TeacherListViewModel()
+        // We will hook up navigation later
+        return TeacherListViewController(viewModel: viewModel)
+    }()
+
+    private lazy var wordsVC = UIViewController()   // Still a placeholder
+    private lazy var profileVC = UIViewController()  // Still a placeholder
     private var currentViewController: UIViewController?
 
     // MARK: - UI Elements
@@ -22,16 +27,16 @@ class MainViewController: UIViewController {
         setupPlaceholderVCs()
         setupUI()
         
-        showViewController(teachersVC)
+        showViewController(teacherListVC)
     }
     
     private func setupPlaceholderVCs() {
-        teachersVC.view.backgroundColor = .systemGray5
+        teacherListVC.view.backgroundColor = .systemGray5
         let teachersLabel = UILabel()
         teachersLabel.text = "Teachers VC Area"
         teachersLabel.textAlignment = .center
-        teachersVC.view.addSubview(teachersLabel)
-        teachersLabel.frame = teachersVC.view.bounds
+        teacherListVC.view.addSubview(teachersLabel)
+        teachersLabel.frame = teacherListVC.view.bounds
         
         wordsVC.view.backgroundColor = .systemGray6
         profileVC.view.backgroundColor = .systemTeal
