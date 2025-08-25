@@ -36,6 +36,7 @@
 		FA8A1E432D6C0B3D00BFC55F /* TimeSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A1E422D6C0B3D00BFC55F /* TimeSlot.swift */; };
 		FA9146322D8E5066001C17B7 /* TeacherRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9146312D8E5066001C17B7 /* TeacherRepository.swift */; };
 		FA92F64D2D9E4EED005B6AE3 /* Ext.+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA92F64C2D9E4EED005B6AE3 /* Ext.+UIView.swift */; };
+		FAAD911A2E5CB11C00E6EA35 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAD91192E5CB11C00E6EA35 /* MainViewController.swift */; };
 		FAC9D6522D84FE1200DC75C9 /* TimeSlotRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC9D6512D84FE1200DC75C9 /* TimeSlotRepository.swift */; };
 		FAC9D6552D84FEB000DC75C9 /* TeacherCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC9D6542D84FEB000DC75C9 /* TeacherCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -74,6 +75,7 @@
 		FA8A1E422D6C0B3D00BFC55F /* TimeSlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSlot.swift; sourceTree = "<group>"; };
 		FA9146312D8E5066001C17B7 /* TeacherRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherRepository.swift; sourceTree = "<group>"; };
 		FA92F64C2D9E4EED005B6AE3 /* Ext.+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ext.+UIView.swift"; sourceTree = "<group>"; };
+		FAAD91192E5CB11C00E6EA35 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		FAC9D6512D84FE1200DC75C9 /* TimeSlotRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSlotRepository.swift; sourceTree = "<group>"; };
 		FAC9D6542D84FEB000DC75C9 /* TeacherCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -295,6 +297,7 @@
 		FA8A1E1C2D6BFAC100BFC55F /* Marko */ = {
 			isa = PBXGroup;
 			children = (
+				FAAD91192E5CB11C00E6EA35 /* MainViewController.swift */,
 				FA47FA582E59789300FE2906 /* Services */,
 				FA92F64B2D9E4ED2005B6AE3 /* Extensions */,
 				FA1CCD172D73463C0091C355 /* Coordinators */,
@@ -436,6 +439,7 @@
 				FA644BE82D72583F008DC0EC /* ProfileCoordinator.swift in Sources */,
 				FA644BED2D725944008DC0EC /* User.swift in Sources */,
 				FA8A1E3A2D6C045C00BFC55F /* TeacherCoordinator.swift in Sources */,
+				FAAD911A2E5CB11C00E6EA35 /* MainViewController.swift in Sources */,
 				FAC9D6552D84FEB000DC75C9 /* TeacherCollectionViewCell.swift in Sources */,
 				FA9146322D8E5066001C17B7 /* TeacherRepository.swift in Sources */,
 				FA644BF42D72599C008DC0EC /* TeacherDetailViewModel.swift in Sources */,
