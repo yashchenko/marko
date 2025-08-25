@@ -37,6 +37,7 @@
 		FA9146322D8E5066001C17B7 /* TeacherRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9146312D8E5066001C17B7 /* TeacherRepository.swift */; };
 		FA92F64D2D9E4EED005B6AE3 /* Ext.+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA92F64C2D9E4EED005B6AE3 /* Ext.+UIView.swift */; };
 		FAAD911A2E5CB11C00E6EA35 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAD91192E5CB11C00E6EA35 /* MainViewController.swift */; };
+		FAAD91202E5CB84B00E6EA35 /* NewTeacherCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAD911F2E5CB84B00E6EA35 /* NewTeacherCollectionViewCell.swift */; };
 		FAC9D6522D84FE1200DC75C9 /* TimeSlotRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC9D6512D84FE1200DC75C9 /* TimeSlotRepository.swift */; };
 		FAC9D6552D84FEB000DC75C9 /* TeacherCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC9D6542D84FEB000DC75C9 /* TeacherCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -76,6 +77,7 @@
 		FA9146312D8E5066001C17B7 /* TeacherRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherRepository.swift; sourceTree = "<group>"; };
 		FA92F64C2D9E4EED005B6AE3 /* Ext.+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ext.+UIView.swift"; sourceTree = "<group>"; };
 		FAAD91192E5CB11C00E6EA35 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		FAAD911F2E5CB84B00E6EA35 /* NewTeacherCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTeacherCollectionViewCell.swift; sourceTree = "<group>"; };
 		FAC9D6512D84FE1200DC75C9 /* TimeSlotRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSlotRepository.swift; sourceTree = "<group>"; };
 		FAC9D6542D84FEB000DC75C9 /* TeacherCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeacherCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -178,6 +180,7 @@
 				FA644BDD2D7257BC008DC0EC /* TeacherDetailViewController.swift */,
 				FA68F8782D6F631900AA2567 /* TeacherListViewController.swift */,
 				FAC9D6542D84FEB000DC75C9 /* TeacherCollectionViewCell.swift */,
+				FAAD911F2E5CB84B00E6EA35 /* NewTeacherCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -451,6 +454,7 @@
 				FA644BF12D725961008DC0EC /* ProfileViewModel.swift in Sources */,
 				FA644BE42D725818008DC0EC /* ProfileViewController.swift in Sources */,
 				FA92F64D2D9E4EED005B6AE3 /* Ext.+UIView.swift in Sources */,
+				FAAD91202E5CB84B00E6EA35 /* NewTeacherCollectionViewCell.swift in Sources */,
 				FA70541A2D9D950800AF849E /* AuthViewController.swift in Sources */,
 				FA8A1E372D6BFC5800BFC55F /* MainTabCoordinator.swift in Sources */,
 				FA675E7D2D6E71B40087483C /* WordsMemoCoordinator.swift in Sources */,

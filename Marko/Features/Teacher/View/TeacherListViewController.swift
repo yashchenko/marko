@@ -58,33 +58,40 @@ class TeacherListViewController: UIViewController, UICollectionViewDelegate, UIC
      }
 
     private func setupCollectionView() {
-        let layout = UICollectionViewFlowLayout()
-        // Item size calculation will be handled by delegate method for responsiveness
-        layout.minimumLineSpacing = 15
-        layout.minimumInteritemSpacing = 15
+        // AC #1: Create a modern compositional layout for a single-column list.
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .absolute(450)) // New, taller height
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 15
+        section.contentInsets = NSDirectionalEdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 15)
+        
+        let layout = UICollectionViewCompositionalLayout(section: section)
 
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
-        collectionView.register(TeacherCollectionViewCell.self, forCellWithReuseIdentifier: TeacherCollectionViewCell.reuseIdentifier) // Use static identifier
+        
+        // Register the NEW cell
+        collectionView.register(NewTeacherCollectionViewCell.self, forCellWithReuseIdentifier: NewTeacherCollectionViewCell.reuseIdentifier)
+        
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = .clear // Make background clear to see view's background
-        collectionView.alwaysBounceVertical = true // Allow scrolling
-        // Hide initially until data loads? Optional.
-        // collectionView.isHidden = true
-
+        collectionView.backgroundColor = .clear
+        
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
-        // Ensure indicator is above collection view
         view.bringSubviewToFront(loadingIndicator)
 
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor) // Use safe area bottom
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
-
-        print("CollectionView set up")
     }
 
     // MARK: UICollectionViewDataSource
@@ -95,18 +102,11 @@ class TeacherListViewController: UIViewController, UICollectionViewDelegate, UIC
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TeacherCollectionViewCell.reuseIdentifier, for: indexPath) as? TeacherCollectionViewCell else {
-            fatalError("Failed to dequeue TeacherCollectionViewCell")
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewTeacherCollectionViewCell.reuseIdentifier, for: indexPath) as? NewTeacherCollectionViewCell else {
+            fatalError("Failed to dequeue NewTeacherCollectionViewCell")
         }
 
-        guard indexPath.item < viewModel.teachers.count else {
-             print("⚠️ Error: Index path item \(indexPath.item) out of bounds for teachers count \(viewModel.teachers.count)")
-             // Return the empty cell gracefully? Or maybe fatalError is better here?
-             return cell // Return empty cell
-         }
-
         let teacher = viewModel.teachers[indexPath.item]
-        print("Configuring cell for teacher: \(teacher.name) at index \(indexPath.item)")
         cell.configure(with: teacher)
         return cell
     }
